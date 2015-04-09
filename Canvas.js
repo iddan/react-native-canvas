@@ -8,6 +8,7 @@ var {
 var Canvas = React.createClass({
 
   propTypes: {
+    context: React.PropTypes.object,
     render: React.PropTypes.func.isRequired
   },
 
@@ -17,14 +18,16 @@ var Canvas = React.createClass({
     var renderString = this.props.render.toString();
 
     return (
-      <WebView
-        automaticallyAdjustContentInsets={false}
-        contentInset={{top: 0, right: 0, bottom: 0, left: 0}}
-        html={"<style>*{margin:0;padding:0;}canvas{position:absolute;transform:translateZ(0);}</style><canvas></canvas><script>var canvas = document.querySelector('canvas');(" + renderString + ").bind(" + contextString + ")(canvas);</script>"}
-        opaque={false}
-        underlayColor={'transparent'}
-        style={this.props.style}
-      />
+      <View>
+        <WebView
+          automaticallyAdjustContentInsets={false}
+          contentInset={{top: 0, right: 0, bottom: 0, left: 0}}
+          html={"<style>*{margin:0;padding:0;}canvas{position:absolute;transform:translateZ(0);}</style><canvas></canvas><script>var canvas = document.querySelector('canvas');(" + renderString + ").bind(" + contextString + ")(canvas);</script>"}
+          opaque={false}
+          underlayColor={'transparent'}
+          style={this.props.style}
+        />
+      </View>
     );
   }
 });
