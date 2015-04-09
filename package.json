@@ -1,0 +1,20 @@
+{
+  "name": "react-native-canvas",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/lwansbrough/react-native-canvas.git"
+  },
+  "version": "0.0.1",
+  "description": "A Canvas element for React Native",
+  "main": "Canvas.js",
+  "author": "Lochlan Wansbrough <lochie@live.com> (http://lwansbrough.com)",
+  "dependencies": {
+    "react-native": "git://github.com/lwansbrough/react-native.git#webview-improvements"
+  },
+  "keywords": [
+    "react-native",
+    "react",
+    "native",
+    "canvas"
+  ]
+}
