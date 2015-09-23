@@ -1,3 +1,6 @@
+# Unmaintained
+This module was developed as an experiment and isn't intended to be used in production. If you would like to do development on a module worthy of replacing this module on npm, please don't hesitate to get in touch and we can work out transferring this name to you.
+
 # react-native-canvas
 
 A canvas view for React Native. This module is currently in the very early stages of development. The code for this is pretty primitive right now. We `.toString()` the `render` method and write HTML into the DOM of the WebView. While this is acceptable, it prevents true interaction with the canvas. I'd like eventually to be able to maintain a reference to the canvas from within the React Native app.
