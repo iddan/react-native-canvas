@@ -1,5 +1,5 @@
 # Unmaintained
-This module was developed as an experiment and isn't intended to be used in production. If you would like to do development on a module worthy of replacing this module on npm, please don't hesitate to get in touch and we can work out transferring this name to you.
+This module was developed as an experiment and isn't intended to be used in production. Currently working on an extensive more modern version of it. In the next version there will be use of ESNext and an easy way to retrieve data from the canvas.
 
 # react-native-canvas
 
@@ -7,7 +7,7 @@ A canvas view for React Native. This module is currently in the very early stage
 
 ## Getting started
 
-1. `npm install react-native-canvas@latest --save`
+`npm install react-native-canvas@latest --save`
 
 ## Usage
 
