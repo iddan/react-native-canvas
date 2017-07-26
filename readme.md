@@ -33,25 +33,25 @@ class App extends Component {
 
 ### API
 
-### Canvas
+#### Canvas
 
-#### Canvas#height
+###### Canvas#height
 
 Reflects the height of the canvas in pixels
 
-#### Canvas#width
+###### Canvas#width
 
 Reflects the width of the canvas in pixels
 
-#### Canvas#getContext()
+###### Canvas#getContext()
 
 Returns a canvas rendering context. Currently only supports 2d context.
 
-#### Canvas#toDataURL()
+###### Canvas#toDataURL()
 
 Returns a `Promise` that resolves to DataURL.
 
-### CanvasRenderingContext2D
+#### CanvasRenderingContext2D
 
 Standard CanvasRenderingContext2D. [MDN](https://developer.mozilla.org/en/docs/Web/API/CanvasRenderingContext2D)
 
