@@ -1,0 +1,13 @@
+{
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "always",
+  "javascript.validate.enable": false,
+  "prettier.eslintIntegration": true,
+  "[javascriptreact]": {
+    "editor.formatOnSave": true
+  },
+  "files.exclude": {
+    "dist/": "explorerExcludedFiles",
+    "node_modules/": "explorerExcludedFiles"
+  }
+}
