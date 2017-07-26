@@ -1,6 +1,6 @@
 {
   "name": "react-native-canvas",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "dist/Canvas.js",
   "devDependencies": {
     "babel-cli": "^6.24.1",
