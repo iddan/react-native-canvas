@@ -51,7 +51,7 @@ Returns a canvas rendering context. Currently only supports 2d context.
 
 Returns a `Promise` that resolves to DataURL.
 
-#### CanvasRenderingContext2D
+### CanvasRenderingContext2D
 
 Standard CanvasRenderingContext2D. [MDN](https://developer.mozilla.org/en/docs/Web/API/CanvasRenderingContext2D)
 
