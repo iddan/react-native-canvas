@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View,WebView} from 'react-native';
+import {View, WebView, ViewStylePropTypes} from 'react-native';
 import defineWebViewMethods from './defineWebViewMethods';
 import defineWebViewProperties from './defineWebViewProperties';
 import CanvasRenderingContext2D from './CanvasRenderingContext2D';
@@ -29,6 +29,10 @@ class Bus {
 @defineWebViewProperties('canvas', {width: 300, height: 150})
 @defineWebViewMethods('canvas', ['toDataURL'])
 export default class Canvas extends Component {
+  static propTypes = {
+    style: ViewStylePropTypes,
+  };
+
   loaded = false;
   bus = new Bus();
   context2D = new CanvasRenderingContext2D(this);
