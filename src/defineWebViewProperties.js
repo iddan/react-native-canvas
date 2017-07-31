@@ -19,6 +19,11 @@ const defineWebViewProperties = (targetName, properties) => target => {
               value,
             },
           });
+
+          if (this.forceUpdate) {
+              this.forceUpdate()
+          }
+
           return (this[privateKey] = value);
         },
       };

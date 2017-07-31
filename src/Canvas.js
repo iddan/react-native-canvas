@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {WebView} from 'react-native';
+import {View,WebView} from 'react-native';
 import defineWebViewMethods from './defineWebViewMethods';
 import defineWebViewProperties from './defineWebViewProperties';
 import CanvasRenderingContext2D from './CanvasRenderingContext2D';
@@ -80,13 +80,15 @@ export default class Canvas extends Component {
     const {width, height} = this;
     const {style} = this.props;
     return (
-      <WebView
-        ref={this.handleRef}
-        style={{width, height, flex: 0, ...style}}
-        source={require('./index.html')}
-        onMessage={this.handleMessage}
-        onLoad={this.handleLoad}
-      />
+      <View style={{width, height, overflow: 'hidden', flex: 0, ...style}}>
+        <WebView
+          ref={this.handleRef}
+          style={{width, height, backgroundColor: 'transparent'}}
+          source={require('./index.html')}
+          onMessage={this.handleMessage}
+          onLoad={this.handleLoad}
+        />
+      </View>
     );
   }
 }
