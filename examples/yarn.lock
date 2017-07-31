@@ -2584,9 +2584,9 @@ react-devtools-core@2.3.1:
     shell-quote "^1.6.1"
     ws "^2.0.3"
 
-"react-native-canvas@git://github.com/assertchris/react-native-canvas.git#feature/make-canvas-transparent":
+react-native-canvas@latest:
   version "0.1.1"
-  resolved "git://github.com/assertchris/react-native-canvas.git#4a06aba611c2ce445f92156b35503b29fa18fa75"
+  resolved "https://registry.yarnpkg.com/react-native-canvas/-/react-native-canvas-0.1.1.tgz#4435aebda2583b1a2f3760db5e7e2f4d36a0fc59"
 
 react-native@0.46.4:
   version "0.46.4"
