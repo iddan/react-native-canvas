@@ -78,10 +78,11 @@ export default class Canvas extends Component {
 
   render() {
     const {width, height} = this;
+    const {style} = this.props;
     return (
       <WebView
         ref={this.handleRef}
-        style={{width, height, flexGrow: 1, flexShrink: 1}}
+        style={{width, height, flex: 0, ...style}}
         source={require('./index.html')}
         onMessage={this.handleMessage}
         onLoad={this.handleLoad}

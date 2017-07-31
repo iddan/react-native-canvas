@@ -5,5 +5,9 @@
   "prettier.eslintIntegration": true,
   "[javascriptreact]": {
     "editor.formatOnSave": true
+  },
+  "files.exclude": {
+    "dist/": "explorerExcludedFiles",
+    "node_modules/": "explorerExcludedFiles"
   }
 }
