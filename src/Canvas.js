@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {View, WebView, ViewStylePropTypes} from 'react-native';
 import defineWebViewMethods from './defineWebViewMethods';
 import defineWebViewProperties from './defineWebViewProperties';
@@ -30,7 +31,7 @@ class Bus {
 @defineWebViewMethods('canvas', ['toDataURL'])
 export default class Canvas extends Component {
   static propTypes = {
-    style: ViewStylePropTypes,
+    style: PropTypes.shape(ViewStylePropTypes),
   };
 
   loaded = false;
