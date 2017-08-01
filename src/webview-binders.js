@@ -1,5 +1,3 @@
-import mapValues from 'lodash/mapValues';
-
 const WEBVIEW_TARGET = Symbol('webviewTarget');
 
 export const webviewTarget = targetName => target => {
@@ -12,14 +10,12 @@ export const webviewConstructor = constructorName => target => {
     if (onConstruction) {
       onConstruction.call(this);
     }
-    this.postMessage({
+    this[WEBVIEW_TARGET] = this.postMessage({
       type: 'construct',
       payload: {
         constructor: constructorName,
       },
-    }).then(({result}) => {
-      this[WEBVIEW_TARGET] = result;
-    });
+    }).then(({result}) => result);
   };
   target.prototype.toJSON = function() {
     return {__ref__: this[WEBVIEW_TARGET]};
@@ -42,34 +38,37 @@ export const webviewMethods = methods => target => {
 };
 
 export const webviewProperties = properties => target => {
-  Object.defineProperties(
-    target.prototype,
-    mapValues(properties, (initialValue, key) => {
-      const privateKey = `__${key}__`;
-      target.prototype[privateKey] = initialValue;
-      return {
-        get() {
-          return this[privateKey];
-        },
-        set(value) {
-          this.postMessage({
-            type: 'set',
-            payload: {
-              target: this[WEBVIEW_TARGET],
-              key,
-              value,
-            },
-          });
+  for (const key of Object.keys(properties)) {
+    const initialValue = properties[key];
+    const privateKey = `__${key}__`;
+    target.prototype[privateKey] = initialValue;
+    Object.defineProperty(target.prototype, key, {
+      get() {
+        return this[privateKey];
+      },
+      set(value) {
+        Promise.resolve(this[WEBVIEW_TARGET])
+          .then(targetName => {
+            console.log(targetName);
+          })
+          .catch(console.error);
+        this.postMessage({
+          type: 'set',
+          payload: {
+            target: this[WEBVIEW_TARGET],
+            key,
+            value,
+          },
+        });
 
-          if (this.forceUpdate) {
-            this.forceUpdate();
-          }
+        if (this.forceUpdate) {
+          this.forceUpdate();
+        }
 
-          return (this[privateKey] = value);
-        },
-      };
-    }),
-  );
+        return (this[privateKey] = value);
+      },
+    });
+  }
 };
 
 export const webviewEvents = types => target => {
@@ -84,7 +83,6 @@ export const webviewEvents = types => target => {
         types,
       },
     });
-    console.log('this', this);
     this.onMessage(message => {
       if (message.type === 'event' && types.includes(message.payload.type)) {
         this.dispatchEvent({

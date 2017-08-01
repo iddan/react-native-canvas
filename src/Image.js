@@ -1,13 +1,13 @@
 import {webviewConstructor, webviewProperties, webviewEvents} from './webview-binders';
 
-@webviewConstructor('Image')
 @webviewProperties({crossOrigin: undefined, height: undefined, src: undefined, width: undefined})
 @webviewEvents(['load', 'error'])
+@webviewConstructor('Image')
 export default class Image {
   constructor(canvas, width, height) {
+    this.canvas = canvas;
     this.width = width;
     this.height = height;
-    this.canvas = canvas;
     if (this.onConstruction) {
       this.onConstruction();
     }

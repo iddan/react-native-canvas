@@ -8,7 +8,7 @@ class App extends Component {
     canvas.width = 100;
     canvas.height = 100;
     const image = new CanvasImage(canvas);
-    console.log(image);
+    // console.log(image);
 
     const context = canvas.getContext('2d');
 
