@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
 import {Image, ScrollView, StatusBar, Text, View, StyleSheet} from 'react-native';
 
-import Canvas from 'react-native-canvas';
+import Canvas, {Image as CanvasImage} from 'react-native-canvas';
 
 class App extends Component {
   handlePurpleRect(canvas) {
     canvas.width = 100;
     canvas.height = 100;
+    const image = new CanvasImage(canvas);
+    console.log(image);
 
     const context = canvas.getContext('2d');
 

@@ -1,7 +1,7 @@
 import {webviewConstructor, webviewProperties, webviewEvents} from './webview-binders';
 
 @webviewConstructor('Image')
-@webviewProperties(['crossOrigin', 'height', 'src', 'width'])
+@webviewProperties({crossOrigin: undefined, height: undefined, src: undefined, width: undefined})
 @webviewEvents(['load', 'error'])
 export default class Image {
   constructor(canvas, width, height) {
@@ -15,5 +15,9 @@ export default class Image {
 
   postMessage(message) {
     return this.canvas.postMessage(message);
+  }
+
+  onMessage(handleMessage) {
+    return this.canvas.onMessage(handleMessage);
   }
 }

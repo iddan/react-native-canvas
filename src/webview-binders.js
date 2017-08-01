@@ -3,14 +3,14 @@ import mapValues from 'lodash/mapValues';
 const WEBVIEW_TARGET = Symbol('webviewTarget');
 
 export const webviewTarget = targetName => target => {
-  target.prototype[webviewTarget] = targetName;
+  target.prototype[WEBVIEW_TARGET] = targetName;
 };
 
 export const webviewConstructor = constructorName => target => {
   const {onConstruction} = target.prototype;
   target.prototype.onConstruction = function() {
     if (onConstruction) {
-      onConstruction();
+      onConstruction.call(this);
     }
     this.postMessage({
       type: 'construct',
@@ -76,7 +76,7 @@ export const webviewEvents = types => target => {
   const {onConstruction} = target.prototype;
   target.prototype.onConstruction = function() {
     if (onConstruction) {
-      onConstruction();
+      onConstruction.call(this);
     }
     this.postMessage({
       type: 'listen',
@@ -84,7 +84,8 @@ export const webviewEvents = types => target => {
         types,
       },
     });
-    this.handleMessage(message => {
+    console.log('this', this);
+    this.onMessage(message => {
       if (message.type === 'event' && types.includes(message.payload.type)) {
         this.dispatchEvent({
           ...message.payload,

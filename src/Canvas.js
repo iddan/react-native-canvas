@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {View, WebView, ViewStylePropTypes} from 'react-native';
 import {webviewTarget, webviewProperties, webviewMethods} from './webview-binders';
 import CanvasRenderingContext2D from './CanvasRenderingContext2D';
+export {default as Image} from './Image';
 
 class Bus {
   actions = [];
@@ -53,6 +54,8 @@ export default class Canvas extends Component {
     }
     this.bus.actions.push(action);
   };
+
+  onMessage = handleMessage => {};
 
   postMessage = message => {
     this.queue(() => this.webview.postMessage(JSON.stringify(message)));
