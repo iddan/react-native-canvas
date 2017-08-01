@@ -6,6 +6,10 @@ const targets = {
   context2D: canvas.getContext('2d'),
 };
 
+const constructors = {
+  Image,
+};
+
 const toMessage = result => {
   if (result instanceof Blob) {
     return {
@@ -32,8 +36,17 @@ document.addEventListener('message', e => {
       }
       case 'set': {
         const {target, key, value} = payload;
+        // document.body.appendChild(document.createTextNode(targets[target]));
         targets[target][key] = value;
         break;
+      }
+      case 'construct': {
+        const {constructor, args = []} = payload;
+        const object = new constructors[constructor](...args);
+        const {length} = Object.keys(targets);
+        targets[length] = object;
+        const message = toMessage(length);
+        postMessage(JSON.stringify(message));
       }
     }
   } catch (err) {
