@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {View, WebView, ViewStylePropTypes} from 'react-native';
-import defineWebViewMethods from './defineWebViewMethods';
-import defineWebViewProperties from './defineWebViewProperties';
+import {webviewTarget, webviewProperties, webviewMethods} from './webview-binders';
 import CanvasRenderingContext2D from './CanvasRenderingContext2D';
 
 class Bus {
@@ -27,8 +26,9 @@ class Bus {
     });
 }
 
-@defineWebViewProperties('canvas', {width: 300, height: 150})
-@defineWebViewMethods('canvas', ['toDataURL'])
+@webviewTarget('canvas')
+@webviewProperties({width: 300, height: 150})
+@webviewMethods(['toDataURL'])
 export default class Canvas extends Component {
   static propTypes = {
     style: PropTypes.shape(ViewStylePropTypes),

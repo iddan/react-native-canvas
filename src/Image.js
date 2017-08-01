@@ -1,22 +1,19 @@
-import defineWebViewConstructor from './defineWebViewConstructor';
-import defineWebViewProperties from './defineWebViewProperties';
-import defineWebViewEvents from './defineWebViewEvents';
+import {webviewConstructor, webviewProperties, webviewEvents} from './webview-binders';
 
-@defineWebViewConstructor
-@defineWebViewProperties(['crossOrigin', 'height', 'src', 'width'])
-@defineWebViewEvents(['load', 'error'])
+@webviewConstructor('Image')
+@webviewProperties(['crossOrigin', 'height', 'src', 'width'])
+@webviewEvents(['load', 'error'])
 export default class Image {
   constructor(canvas, width, height) {
     this.width = width;
     this.height = height;
     this.canvas = canvas;
+    if (this.onConstruction) {
+      this.onConstruction();
+    }
   }
 
   postMessage(message) {
     return this.canvas.postMessage(message);
   }
-
-  onload() {}
-
-  onerror() {}
 }
