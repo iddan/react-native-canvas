@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {View,WebView} from 'react-native';
+import PropTypes from 'prop-types';
+import {View, WebView, ViewStylePropTypes} from 'react-native';
 import defineWebViewMethods from './defineWebViewMethods';
 import defineWebViewProperties from './defineWebViewProperties';
 import CanvasRenderingContext2D from './CanvasRenderingContext2D';
@@ -29,6 +30,10 @@ class Bus {
 @defineWebViewProperties('canvas', {width: 300, height: 150})
 @defineWebViewMethods('canvas', ['toDataURL'])
 export default class Canvas extends Component {
+  static propTypes = {
+    style: PropTypes.shape(ViewStylePropTypes),
+  };
+
   loaded = false;
   bus = new Bus();
   context2D = new CanvasRenderingContext2D(this);
@@ -78,8 +83,9 @@ export default class Canvas extends Component {
 
   render() {
     const {width, height} = this;
+    const {style} = this.props;
     return (
-      <View style={{width, height, overflow: 'hidden'}}>
+      <View style={{width, height, overflow: 'hidden', flex: 0, ...style}}>
         <WebView
           ref={this.handleRef}
           style={{width, height, backgroundColor: 'transparent'}}
