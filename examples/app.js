@@ -8,12 +8,15 @@ class App extends Component {
     canvas.width = 100;
     canvas.height = 100;
     const image = new CanvasImage(canvas);
-    // console.log(image);
 
     const context = canvas.getContext('2d');
 
     context.fillStyle = 'purple';
     context.fillRect(0, 0, 100, 100);
+    image.src = 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Donald_Trump_Pentagon_2017.jpg';
+    image.addEventListener('load', () => {
+      console.log('image is loaded');
+    });
   }
 
   handleRedCircle(canvas) {

@@ -80,10 +80,11 @@ export const webviewEvents = types => target => {
       type: 'listen',
       payload: {
         types,
+        target: this[WEBVIEW_TARGET],
       },
     });
     this.addMessageListener(message => {
-      if (message.type === 'event' && types.includes(message.payload.type)) {
+      if (message && message.type === 'event' && types.includes(message.payload.type)) {
         this.dispatchEvent({
           ...message.payload,
           target: this,

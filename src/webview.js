@@ -19,8 +19,21 @@ const toMessage = result => {
   }
   return {
     type: 'json',
-    payload: JSON.stringify(result),
+    payload: result,
   };
+};
+
+const handleEvent = e => {
+  postMessage(
+    JSON.stringify(
+      toMessage({
+        type: 'event',
+        payload: {
+          type: e.type,
+        },
+      }),
+    ),
+  );
 };
 
 document.addEventListener('message', e => {
@@ -29,7 +42,14 @@ document.addEventListener('message', e => {
     switch (type) {
       case 'exec': {
         const {target, method, args} = payload;
-        const result = targets[target][method](...args);
+        const result = targets[target][method](
+          ...args.map(arg => {
+            if (arg.__ref__) {
+              return targets[arg.__ref__];
+            }
+            return arg;
+          }),
+        );
         const message = toMessage(result);
         postMessage(JSON.stringify(message));
         break;
@@ -44,6 +64,14 @@ document.addEventListener('message', e => {
         const object = new constructors[constructor](...args);
         targets[id] = object;
         postMessage(JSON.stringify(toMessage({})));
+        break;
+      }
+      case 'listen': {
+        const {types, target} = payload;
+        for (const eventType of types) {
+          targets[target].addEventListener(eventType, handleEvent);
+        }
+        break;
       }
     }
   } catch (err) {

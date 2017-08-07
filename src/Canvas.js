@@ -76,21 +76,20 @@ export default class Canvas extends Component {
   };
 
   postMessage = message => {
-    return this.bus.send(JSON.stringify(message)).then(({type, payload}) => {
-      switch (type) {
-        case 'json': {
-          return payload;
-        }
-        case 'blob': {
-          return atob(payload);
-        }
-      }
-    });
+    return this.bus.send(JSON.stringify(message));
   };
 
   handleMessage = e => {
     for (const listener of this.listeners) {
-      listener(JSON.parse(e.nativeEvent.data));
+      const {type, payload} = JSON.parse(e.nativeEvent.data);
+      switch (type) {
+        case 'json': {
+          return listener(payload);
+        }
+        case 'blob': {
+          return listener(atob(payload));
+        }
+      }
     }
   };
 
