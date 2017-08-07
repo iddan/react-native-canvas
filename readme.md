@@ -58,3 +58,11 @@ Standard CanvasRenderingContext2D. [MDN](https://developer.mozilla.org/en/docs/W
 ```javascript
 const ctx = canvas.getContext('2d');
 ```
+
+#### Image
+
+WebView Image constructor. Unlike in the browsers accepts canvas as first argument. [MDN](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image)
+
+```javascript
+const image = new Image(canvas, height, width);
+```
