@@ -6,18 +6,18 @@ import {webviewConstructor, webviewProperties, webviewEvents} from './webview-bi
 export default class Image {
   constructor(canvas, width, height) {
     this.canvas = canvas;
-    this.width = width;
-    this.height = height;
     if (this.onConstruction) {
       this.onConstruction();
     }
+    this.width = width;
+    this.height = height;
   }
 
-  postMessage(message) {
+  postMessage = message => {
     return this.canvas.postMessage(message);
-  }
+  };
 
-  addMessageListener(listener) {
+  addMessageListener = listener => {
     return this.canvas.addMessageListener(listener);
-  }
+  };
 }

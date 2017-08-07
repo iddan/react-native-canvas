@@ -7,7 +7,7 @@ class App extends Component {
   handlePurpleRect(canvas) {
     canvas.width = 100;
     canvas.height = 100;
-    // const image = new CanvasImage(canvas);
+    const image = new CanvasImage(canvas);
     // console.log(image);
 
     const context = canvas.getContext('2d');

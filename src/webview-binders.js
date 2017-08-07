@@ -4,18 +4,22 @@ export const webviewTarget = targetName => target => {
   target.prototype[WEBVIEW_TARGET] = targetName;
 };
 
+const ID = () => Math.random().toString(32).slice(2);
+
 export const webviewConstructor = constructorName => target => {
   const {onConstruction} = target.prototype;
   target.prototype.onConstruction = function() {
     if (onConstruction) {
       onConstruction.call(this);
     }
-    this[WEBVIEW_TARGET] = this.postMessage({
+    this[WEBVIEW_TARGET] = ID();
+    this.postMessage({
       type: 'construct',
       payload: {
         constructor: constructorName,
+        id: this[WEBVIEW_TARGET],
       },
-    }).then(({result}) => result);
+    });
   };
   target.prototype.toJSON = function() {
     return {__ref__: this[WEBVIEW_TARGET]};
@@ -47,11 +51,6 @@ export const webviewProperties = properties => target => {
         return this[privateKey];
       },
       set(value) {
-        Promise.resolve(this[WEBVIEW_TARGET])
-          .then(targetName => {
-            console.log(targetName);
-          })
-          .catch(console.error);
         this.postMessage({
           type: 'set',
           payload: {
