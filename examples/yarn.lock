@@ -2584,9 +2584,9 @@ react-devtools-core@2.3.1:
     shell-quote "^1.6.1"
     ws "^2.0.3"
 
-react-native-canvas@latest:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/react-native-canvas/-/react-native-canvas-0.1.1.tgz#4435aebda2583b1a2f3760db5e7e2f4d36a0fc59"
+react-native-canvas@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-canvas/-/react-native-canvas-0.1.2.tgz#404fe5896050d5513cc43e8fb42c8fb17122ab35"
 
 react-native@0.46.4:
   version "0.46.4"
