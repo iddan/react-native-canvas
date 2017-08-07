@@ -76,7 +76,6 @@ export default class Canvas extends Component {
   };
 
   postMessage = message => {
-    console.log(message);
     return this.bus.send(JSON.stringify(message)).then(({type, payload}) => {
       switch (type) {
         case 'json': {
@@ -90,7 +89,6 @@ export default class Canvas extends Component {
   };
 
   handleMessage = e => {
-    console.log(e.nativeEvent.data);
     for (const listener of this.listeners) {
       listener(JSON.parse(e.nativeEvent.data));
     }
