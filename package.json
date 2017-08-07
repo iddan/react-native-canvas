@@ -3,9 +3,9 @@
   "version": "0.1.1",
   "main": "dist/Canvas.js",
   "scripts": {
-    "start": "babel src --out-dir dist --copy-files --watch",
+    "start": "babel src --out-dir dist --copy-files --watch --source-maps",
     "build": "babel src --out-dir dist --copy-files",
-    "copy-to-example": "cp dist/* examples/node_modules/react-native-canvas/dist"
+    "build-to-example": "babel src --out-dir examples/node_modules/react-native-canvas/dist --copy-files --watch --source-maps"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

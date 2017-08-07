@@ -83,7 +83,7 @@ export const webviewEvents = types => target => {
         types,
       },
     });
-    this.onMessage(message => {
+    this.addMessageListener(message => {
       if (message.type === 'event' && types.includes(message.payload.type)) {
         this.dispatchEvent({
           ...message.payload,

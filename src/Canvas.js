@@ -6,25 +6,37 @@ import CanvasRenderingContext2D from './CanvasRenderingContext2D';
 export {default as Image} from './Image';
 
 class Bus {
-  actions = [];
-  messageListeners = [];
+  queued = [];
+  paused = false;
 
-  popActions = () => {
-    for (const action of this.actions) {
-      action();
-    }
-    this.actions = [];
-  };
+  constructor(send, listen) {
+    this._send = send;
+    this._listen = listen;
+  }
 
-  pushMessage = message => {
-    const listener = this.messageListeners.pop();
-    listener(message);
-  };
-
-  getNextMessage = () =>
+  send = message =>
     new Promise(resolve => {
-      this.messageListeners.push(resolve);
+      if (this.paused) {
+        this.queued.push({message, resolve});
+        return;
+      }
+      this._send(message);
+      const unlisten = this._listen(response => {
+        resolve(response);
+        unlisten();
+      });
     });
+
+  pause = () => {
+    this.paused = true;
+  };
+
+  resume = () => {
+    this.paused = false;
+    for (const {message, resolve} of this.queued) {
+      resolve(this.send(message));
+    }
+  };
 }
 
 @webviewTarget('canvas')
@@ -35,9 +47,24 @@ export default class Canvas extends Component {
     style: PropTypes.shape(ViewStylePropTypes),
   };
 
+  addMessageListener = listener => {
+    this.listeners.push(listener);
+    return () => this.removeMessageListener(listener);
+  };
+
+  removeMessageListener = listener => {
+    this.listeners.splice(this.listeners.indexOf(listener), 1);
+  };
+
   loaded = false;
-  bus = new Bus();
+  bus = new Bus(message => this.webview.postMessage(message), this.addMessageListener);
+  listeners = [];
   context2D = new CanvasRenderingContext2D(this);
+
+  constructor() {
+    super();
+    this.bus.pause();
+  }
 
   getContext = (contextType, contextAttributes) => {
     switch (contextType) {
@@ -48,18 +75,9 @@ export default class Canvas extends Component {
     return null;
   };
 
-  queue = action => {
-    if (this.loaded) {
-      action();
-    }
-    this.bus.actions.push(action);
-  };
-
-  onMessage = handleMessage => {};
-
   postMessage = message => {
-    this.queue(() => this.webview.postMessage(JSON.stringify(message)));
-    return this.bus.getNextMessage().then(({type, payload}) => {
+    console.log(message);
+    return this.bus.send(JSON.stringify(message)).then(({type, payload}) => {
       switch (type) {
         case 'json': {
           return payload;
@@ -72,7 +90,10 @@ export default class Canvas extends Component {
   };
 
   handleMessage = e => {
-    this.bus.pushMessage(JSON.parse(e.nativeEvent.data));
+    console.log(e.nativeEvent.data);
+    for (const listener of this.listeners) {
+      listener(JSON.parse(e.nativeEvent.data));
+    }
   };
 
   handleRef = element => {
@@ -81,7 +102,7 @@ export default class Canvas extends Component {
 
   handleLoad = () => {
     this.loaded = true;
-    this.bus.popActions();
+    this.bus.resume();
   };
 
   render() {

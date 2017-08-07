@@ -17,7 +17,7 @@ export default class Image {
     return this.canvas.postMessage(message);
   }
 
-  onMessage(handleMessage) {
-    return this.canvas.onMessage(handleMessage);
+  addMessageListener(listener) {
+    return this.canvas.addMessageListener(listener);
   }
 }
