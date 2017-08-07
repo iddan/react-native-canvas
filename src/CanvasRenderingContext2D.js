@@ -1,7 +1,7 @@
-import defineWebViewMethods from './defineWebViewMethods';
-import defineWebViewProperties from './defineWebViewProperties';
+import {webviewTarget, webviewProperties, webviewMethods} from './webview-binders';
 
-@defineWebViewProperties('context2D', {
+@webviewTarget('context2D')
+@webviewProperties({
   fillStyle: '#000',
   font: '10px sans-serif',
   globalAlpha: 1.0,
@@ -19,7 +19,7 @@ import defineWebViewProperties from './defineWebViewProperties';
   textAlign: 'start',
   textBaseline: 'alphabetic',
 })
-@defineWebViewMethods('context2D', [
+@webviewMethods([
   'arc',
   'arcTo',
   'beginPath',

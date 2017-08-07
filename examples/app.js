@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Image, ScrollView, StatusBar, Text, View, StyleSheet} from 'react-native';
 
-import Canvas from 'react-native-canvas';
+import Canvas, {Image as CanvasImage} from 'react-native-canvas';
 
 class App extends Component {
   handlePurpleRect(canvas) {
@@ -23,6 +23,19 @@ class App extends Component {
     context.fillStyle = 'red';
     context.arc(50, 50, 49, 0, Math.PI * 2, true);
     context.fill();
+  }
+
+  handleImageRect(canvas) {
+    const image = new CanvasImage(canvas);
+    canvas.width = 100;
+    canvas.height = 100;
+
+    const context = canvas.getContext('2d');
+
+    image.src = 'https://image.freepik.com/free-vector/unicorn-background-design_1324-79.jpg';
+    image.addEventListener('load', () => {
+      context.drawImage(image, 0, 0, 100, 100);
+    });
   }
 
   render() {
@@ -52,6 +65,14 @@ class App extends Component {
             </View>
             <View style={styles.exampleRight}>
               <Image source={require('./images/red-circle.png')} />
+            </View>
+          </View>
+          <View style={styles.example}>
+            <View style={styles.exampleLeft}>
+              <Canvas ref={this.handleImageRect} />
+            </View>
+            <View style={styles.exampleRight}>
+              <Image source={require('./images/image-rect.png')} style={{width: 100, height: 100}} />
             </View>
           </View>
         </ScrollView>

@@ -6,6 +6,10 @@ const targets = {
   context2D: canvas.getContext('2d'),
 };
 
+const constructors = {
+  Image,
+};
+
 const toMessage = result => {
   if (result instanceof Blob) {
     return {
@@ -15,8 +19,21 @@ const toMessage = result => {
   }
   return {
     type: 'json',
-    payload: JSON.stringify(result),
+    payload: result,
   };
+};
+
+const handleEvent = e => {
+  postMessage(
+    JSON.stringify(
+      toMessage({
+        type: 'event',
+        payload: {
+          type: e.type,
+        },
+      }),
+    ),
+  );
 };
 
 document.addEventListener('message', e => {
@@ -25,7 +42,14 @@ document.addEventListener('message', e => {
     switch (type) {
       case 'exec': {
         const {target, method, args} = payload;
-        const result = targets[target][method](...args);
+        const result = targets[target][method](
+          ...args.map(arg => {
+            if (arg.__ref__) {
+              return targets[arg.__ref__];
+            }
+            return arg;
+          }),
+        );
         const message = toMessage(result);
         postMessage(JSON.stringify(message));
         break;
@@ -33,6 +57,20 @@ document.addEventListener('message', e => {
       case 'set': {
         const {target, key, value} = payload;
         targets[target][key] = value;
+        break;
+      }
+      case 'construct': {
+        const {constructor, id, args = []} = payload;
+        const object = new constructors[constructor](...args);
+        targets[id] = object;
+        postMessage(JSON.stringify(toMessage({})));
+        break;
+      }
+      case 'listen': {
+        const {types, target} = payload;
+        for (const eventType of types) {
+          targets[target].addEventListener(eventType, handleEvent);
+        }
         break;
       }
     }
