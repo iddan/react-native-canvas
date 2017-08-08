@@ -1,9 +1,16 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {View, WebView, ViewStylePropTypes} from 'react-native';
-import {webviewTarget, webviewProperties, webviewMethods} from './webview-binders';
+import {webviewTarget, webviewProperties, webviewMethods, webviewRef, WEBVIEW_TARGET} from './webview-binders';
 import CanvasRenderingContext2D from './CanvasRenderingContext2D';
+import CanvasGradient from './CanvasGradient';
+import CanvasPattern from './CanvasPattern';
 export {default as Image} from './Image';
+
+const Constructors = {
+  CanvasGradient: webviewRef(CanvasGradient),
+  CanvasPattern: webviewRef(CanvasPattern),
+};
 
 class Bus {
   queued = [];
@@ -83,6 +90,11 @@ export default class Canvas extends Component {
     for (const listener of this.listeners) {
       const {type, payload} = JSON.parse(e.nativeEvent.data);
       switch (type) {
+        case 'ref': {
+          const object = new Constructors[payload.constructor]();
+          object[WEBVIEW_TARGET] = payload.id;
+          return listener(object);
+        }
         case 'json': {
           return listener(payload);
         }

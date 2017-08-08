@@ -1,6 +1,8 @@
 const canvas = document.createElement('canvas');
 document.body.appendChild(canvas);
 
+const ID = () => Math.random().toString(32).slice(2);
+
 const targets = {
   canvas,
   context2D: canvas.getContext('2d'),
@@ -8,6 +10,8 @@ const targets = {
 
 const constructors = {
   Image,
+  CanvasGradient,
+  CanvasPattern,
 };
 
 const toMessage = result => {
@@ -15,6 +19,17 @@ const toMessage = result => {
     return {
       type: 'blob',
       payload: btoa(result),
+    };
+  }
+  if (result && constructors[result.constructor.name]) {
+    const id = ID();
+    targets[id] = result;
+    return {
+      type: 'ref',
+      payload: {
+        id,
+        constructor: result.constructor.name,
+      },
     };
   }
   return {
@@ -63,7 +78,7 @@ document.addEventListener('message', e => {
         const {constructor, id, args = []} = payload;
         const object = new constructors[constructor](...args);
         targets[id] = object;
-        postMessage(JSON.stringify(toMessage({})));
+        postMessage(JSON.stringify(toMessage(null)));
         break;
       }
       case 'listen': {
@@ -75,6 +90,6 @@ document.addEventListener('message', e => {
       }
     }
   } catch (err) {
-    document.body.innerHTML = `<div class="error">${err}</div>`;
+    document.body.innerHTML += `<div class="error">${err}</div>`;
   }
 });

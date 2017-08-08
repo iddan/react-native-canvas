@@ -1,10 +1,17 @@
-const WEBVIEW_TARGET = Symbol('webviewTarget');
+export const WEBVIEW_TARGET = '@@WEBVIEW_TARGET';
+const WEBVIEW_CONSTRUCTORS = '@@WEBVIEW_CONSTRUCTORS';
 
 export const webviewTarget = targetName => target => {
   target.prototype[WEBVIEW_TARGET] = targetName;
 };
 
 const ID = () => Math.random().toString(32).slice(2);
+
+export const webviewRef = target => {
+  target.prototype.toJSON = function() {
+    return {__ref__: this[WEBVIEW_TARGET]};
+  };
+};
 
 export const webviewConstructor = constructorName => target => {
   const {onConstruction} = target.prototype;
@@ -21,9 +28,7 @@ export const webviewConstructor = constructorName => target => {
       },
     });
   };
-  target.prototype.toJSON = function() {
-    return {__ref__: this[WEBVIEW_TARGET]};
-  };
+  webviewRef(target);
 };
 
 export const webviewMethods = methods => target => {

@@ -9,7 +9,8 @@ class App extends Component {
     canvas.height = 100;
 
     const context = canvas.getContext('2d');
-
+    // const gradient = context.createLinearGradient(100, 100, 100, 100).then(console.log).catch(console.error);
+    // gradient.addColorStop(100, 'purple');
     context.fillStyle = 'purple';
     context.fillRect(0, 0, 100, 100);
   }
