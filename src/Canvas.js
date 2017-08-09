@@ -95,11 +95,16 @@ export default class Canvas extends Component {
 
   handleRef = element => {
     this.webview = element;
+    if (this.loaded) {
+      this.bus.resume();
+    }
   };
 
   handleLoad = () => {
     this.loaded = true;
-    this.bus.resume();
+    if (this.webview) {
+      this.bus.resume();
+    }
   };
 
   render() {
