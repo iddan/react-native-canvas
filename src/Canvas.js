@@ -57,7 +57,10 @@ export default class Canvas extends Component {
   };
 
   loaded = false;
-  bus = new Bus(message => this.webview.postMessage(message), this.addMessageListener);
+  /**
+   * in the mounting process this.webview can be set to null
+   */
+  bus = new Bus(message => this.webview && this.webview.postMessage(message), this.addMessageListener);
   listeners = [];
   context2D = new CanvasRenderingContext2D(this);
 
@@ -95,16 +98,11 @@ export default class Canvas extends Component {
 
   handleRef = element => {
     this.webview = element;
-    if (this.loaded) {
-      this.bus.resume();
-    }
   };
 
   handleLoad = () => {
     this.loaded = true;
-    if (this.webview) {
-      this.bus.resume();
-    }
+    this.bus.resume();
   };
 
   render() {
