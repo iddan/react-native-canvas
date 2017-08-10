@@ -6,7 +6,7 @@
     "start": "babel src --out-dir dist --copy-files --watch --source-maps",
     "build": "babel src --out-dir dist --copy-files",
     "build-to-example": "babel src --out-dir examples/node_modules/react-native-canvas/dist --copy-files --watch --source-maps",
-    "prepublish": "yarn build"
+    "prepare": "yarn build"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
