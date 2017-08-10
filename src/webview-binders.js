@@ -1,4 +1,4 @@
-const WEBVIEW_TARGET = Symbol('webviewTarget');
+const WEBVIEW_TARGET = '@@WEBVIEW_TARGET';
 
 export const webviewTarget = targetName => target => {
   target.prototype[WEBVIEW_TARGET] = targetName;
