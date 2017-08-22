@@ -83,27 +83,15 @@ export const webviewEvents = types => target => {
         target: this[WEBVIEW_TARGET],
       },
     });
+  };
+  target.prototype.addEventListener = function(type, callback) {
     this.addMessageListener((id, message) => {
-      if (message && message.type === 'event' && types.includes(message.payload.type)) {
-        this.dispatchEvent({
+      if (message && message.type === 'event' && message.payload.type === type) {
+        callback({
           ...message.payload,
           target: this,
         });
       }
     });
-  };
-  target.prototype.listeners = {};
-  target.prototype.addEventListener = function(type, callback) {
-    const listeners = (this.listeners[type] = this.listeners[type] || []);
-    listeners.push(callback);
-  };
-  target.prototype.dispatchEvent = function(event) {
-    const listeners = this.listeners[event.type];
-    if (!listeners) {
-      return;
-    }
-    for (const listener of listeners) {
-      listener(event);
-    }
   };
 };
