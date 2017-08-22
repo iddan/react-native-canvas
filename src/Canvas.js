@@ -5,6 +5,8 @@ import {webviewTarget, webviewProperties, webviewMethods} from './webview-binder
 import CanvasRenderingContext2D from './CanvasRenderingContext2D';
 export {default as Image} from './Image';
 
+let _messageId = 0;
+
 class Bus {
   queued = [];
   paused = false;
@@ -16,15 +18,20 @@ class Bus {
 
   send = message =>
     new Promise(resolve => {
-      if (this.paused) {
-        this.queued.push({message, resolve});
-        return;
-      }
-      this._send(message);
-      const unlisten = this._listen(response => {
-        resolve(response);
-        unlisten();
+      const _id = ++_messageId;
+      const unlisten = this._listen((id, response) => {
+        if (id === _id) {
+          resolve(response);
+          unlisten();
+        }
       });
+      if (this.paused) {
+        this.queued.push(() => {
+          this._send(JSON.stringify({id: _id, ...message}));
+        });
+      } else {
+        this._send(JSON.stringify({id: _id, ...message}));
+      }
     });
 
   pause = () => {
@@ -33,9 +40,10 @@ class Bus {
 
   resume = () => {
     this.paused = false;
-    for (const {message, resolve} of this.queued) {
-      resolve(this.send(message));
+    for (const callback of this.queued) {
+      callback();
     }
+    this.queued = [];
   };
 }
 
@@ -60,7 +68,8 @@ export default class Canvas extends Component {
   /**
    * in the mounting process this.webview can be set to null
    */
-  bus = new Bus(message => this.webview && this.webview.postMessage(message), this.addMessageListener);
+  webviewPostMessage = message => this.webview && this.webview.postMessage(message);
+  bus = new Bus(this.webviewPostMessage, this.addMessageListener);
   listeners = [];
   context2D = new CanvasRenderingContext2D(this);
 
@@ -79,18 +88,20 @@ export default class Canvas extends Component {
   };
 
   postMessage = message => {
-    return this.bus.send(JSON.stringify(message));
+    return this.bus.send(message);
   };
 
   handleMessage = e => {
+    const {id, type, payload} = JSON.parse(e.nativeEvent.data);
     for (const listener of this.listeners) {
-      const {type, payload} = JSON.parse(e.nativeEvent.data);
       switch (type) {
         case 'json': {
-          return listener(payload);
+          listener(id, payload);
+          break;
         }
         case 'blob': {
-          return listener(atob(payload));
+          listener(id, atob(payload));
+          break;
         }
       }
     }

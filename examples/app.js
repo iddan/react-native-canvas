@@ -4,7 +4,7 @@ import {Image, ScrollView, StatusBar, Text, View, StyleSheet} from 'react-native
 import Canvas, {Image as CanvasImage} from 'react-native-canvas';
 
 class App extends Component {
-  handlePurpleRect(canvas) {
+  async handlePurpleRect(canvas) {
     canvas.width = 100;
     canvas.height = 100;
 
@@ -12,6 +12,9 @@ class App extends Component {
 
     context.fillStyle = 'purple';
     context.fillRect(0, 0, 100, 100);
+
+    const {width} = await context.measureText('yo');
+    console.log(width);
   }
 
   handleRedCircle(canvas) {
@@ -34,6 +37,7 @@ class App extends Component {
 
     image.src = 'https://image.freepik.com/free-vector/unicorn-background-design_1324-79.jpg';
     image.addEventListener('load', () => {
+      console.log('image is loaded');
       context.drawImage(image, 0, 0, 100, 100);
     });
   }

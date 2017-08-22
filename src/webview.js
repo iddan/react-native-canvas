@@ -10,6 +10,20 @@ const constructors = {
   Image,
 };
 
+const flattenObject = object => {
+  if (typeof object !== 'object') {
+    return object;
+  }
+  const flatObject = {};
+  for (const key in object) {
+    flatObject[key] = object[key];
+  }
+  for (const key in Object.getOwnPropertyNames(object)) {
+    flatObject[key] = object[key];
+  }
+  return flatObject;
+};
+
 const toMessage = result => {
   if (result instanceof Blob) {
     return {
@@ -19,39 +33,26 @@ const toMessage = result => {
   }
   return {
     type: 'json',
-    payload: result,
+    payload: flattenObject(result),
   };
 };
 
-const handleEvent = e => {
-  postMessage(
-    JSON.stringify(
-      toMessage({
-        type: 'event',
-        payload: {
-          type: e.type,
-        },
-      }),
-    ),
-  );
+const populateRefs = arg => {
+  if (arg.__ref__) {
+    return targets[arg.__ref__];
+  }
+  return arg;
 };
 
 document.addEventListener('message', e => {
-  const {type, payload} = JSON.parse(e.data);
+  const {id, type, payload} = JSON.parse(e.data);
   try {
     switch (type) {
       case 'exec': {
         const {target, method, args} = payload;
-        const result = targets[target][method](
-          ...args.map(arg => {
-            if (arg.__ref__) {
-              return targets[arg.__ref__];
-            }
-            return arg;
-          }),
-        );
+        const result = targets[target][method](...args.map(populateRefs));
         const message = toMessage(result);
-        postMessage(JSON.stringify(message));
+        postMessage(JSON.stringify({id, ...message}));
         break;
       }
       case 'set': {
@@ -60,16 +61,26 @@ document.addEventListener('message', e => {
         break;
       }
       case 'construct': {
-        const {constructor, id, args = []} = payload;
+        const {constructor, id: target, args = []} = payload;
         const object = new constructors[constructor](...args);
-        targets[id] = object;
-        postMessage(JSON.stringify(toMessage({})));
+        const message = toMessage({});
+        targets[target] = object;
+        postMessage(JSON.stringify({id, ...message}));
         break;
       }
       case 'listen': {
         const {types, target} = payload;
         for (const eventType of types) {
-          targets[target].addEventListener(eventType, handleEvent);
+          targets[target].addEventListener(eventType, e => {
+            document.body.appendChild(document.createTextNode(id));
+            const message = toMessage({
+              type: 'event',
+              payload: {
+                type: e.type,
+              },
+            });
+            postMessage(JSON.stringify({id, ...message}));
+          });
         }
         break;
       }
