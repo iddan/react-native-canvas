@@ -72,7 +72,6 @@ document.addEventListener('message', e => {
         const {types, target} = payload;
         for (const eventType of types) {
           targets[target].addEventListener(eventType, e => {
-            document.body.appendChild(document.createTextNode(id));
             const message = toMessage({
               type: 'event',
               payload: {
