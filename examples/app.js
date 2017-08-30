@@ -42,7 +42,7 @@ class App extends Component {
     });
   }
 
-  handlePath(canvas) {
+  async handlePath(canvas) {
     canvas.width = 100;
     canvas.height = 100;
     const context = canvas.getContext('2d');
@@ -56,6 +56,9 @@ class App extends Component {
     context.scale(0.5, 0.5);
     context.translate(50, 20);
     const rectPath = new Path2D(canvas, 'M10 10 h 80 v 80 h -80 Z');
+
+    console.log('Is 0, 0 in the rectangle', await context.isPointInPath(rectPath, 0, 0));
+    console.log('Is 50, 50 in the rectangle', await context.isPointInPath(rectPath, 50, 50));
 
     context.fillStyle = 'pink';
     context.fill(rectPath);
