@@ -17,6 +17,8 @@
     "eslint-config-fbjs-opensource": "^1.0.0",
     "prettier": "^1.5.3"
   },
-  "dependencies": {},
+  "dependencies": {
+    "canvas-5-polyfill": "^0.1.5"
+  },
   "repository": "https://github.com/iddan/react-native-canvas"
 }
