@@ -17,5 +17,6 @@
     "eslint-config-fbjs-opensource": "^1.0.0",
     "prettier": "^1.5.3"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "repository": "https://github.com/iddan/react-native-canvas"
 }
