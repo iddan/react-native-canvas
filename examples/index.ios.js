@@ -1,6 +1,8 @@
-import React from "react"
-import { AppRegistry } from "react-native"
+console.time('start up time')
+const React =  require("react")
+const { AppRegistry } =  require("react-native")
 
-import App from "./app"
+const App = require("./app").default
 
 AppRegistry.registerComponent("examples", () => App);
+console.timeEnd('start up time')

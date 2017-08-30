@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Image, ScrollView, StatusBar, Text, View, StyleSheet} from 'react-native';
 
-import Canvas, {Image as CanvasImage} from 'react-native-canvas';
+import Canvas, {Image as CanvasImage, Path2D} from 'react-native-canvas';
 
 class App extends Component {
   async handlePurpleRect(canvas) {
@@ -42,6 +42,26 @@ class App extends Component {
     });
   }
 
+  handlePath(canvas) {
+    canvas.width = 100;
+    canvas.height = 100;
+    const context = canvas.getContext('2d');
+
+    const ellipse = new Path2D(canvas);
+    ellipse.ellipse(50, 50, 25, 35, 45 * Math.PI / 180, 0, 2 * Math.PI);
+    context.fillStyle = 'purple';
+    context.fill(ellipse);
+
+    context.save();
+    context.scale(0.5, 0.5);
+    context.translate(50, 20);
+    const rectPath = new Path2D(canvas, 'M10 10 h 80 v 80 h -80 Z');
+
+    context.fillStyle = 'pink';
+    context.fill(rectPath);
+    context.restore();
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -74,6 +94,14 @@ class App extends Component {
           <View style={styles.example}>
             <View style={styles.exampleLeft}>
               <Canvas ref={this.handleImageRect} />
+            </View>
+            <View style={styles.exampleRight}>
+              <Image source={require('./images/image-rect.png')} style={{width: 100, height: 100}} />
+            </View>
+          </View>
+          <View style={styles.example}>
+            <View style={styles.exampleLeft}>
+              <Canvas ref={this.handlePath} />
             </View>
             <View style={styles.exampleRight}>
               <Image source={require('./images/image-rect.png')} style={{width: 100, height: 100}} />

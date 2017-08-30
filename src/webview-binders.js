@@ -8,7 +8,11 @@ const ID = () => Math.random().toString(32).slice(2);
 
 export const webviewConstructor = constructorName => target => {
   const {onConstruction} = target.prototype;
-  target.prototype.onConstruction = function() {
+  /**
+   * Arguments should be identical to the arguments passed to the constructor
+   * just without the canvas instance
+   */
+  target.prototype.onConstruction = function(...args) {
     if (onConstruction) {
       onConstruction.call(this);
     }
@@ -18,6 +22,7 @@ export const webviewConstructor = constructorName => target => {
       payload: {
         constructor: constructorName,
         id: this[WEBVIEW_TARGET],
+        args,
       },
     });
   };

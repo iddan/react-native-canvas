@@ -4,6 +4,7 @@ import {View, WebView, ViewStylePropTypes} from 'react-native';
 import {webviewTarget, webviewProperties, webviewMethods} from './webview-binders';
 import CanvasRenderingContext2D from './CanvasRenderingContext2D';
 export {default as Image} from './Image';
+export {default as Path2D} from './Path2D';
 
 let _messageId = 0;
 

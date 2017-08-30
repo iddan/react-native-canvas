@@ -8,6 +8,7 @@ const targets = {
 
 const constructors = {
   Image,
+  Path2D,
 };
 
 const flattenObject = object => {
