@@ -54,7 +54,7 @@ document.addEventListener('message', e => {
         const {target, method, args} = payload;
         const result = targets[target][method](...args.map(populateRefs));
         const message = toMessage(result);
-        postMessage(JSON.stringify(({...{id}, ...message})));
+        postMessage(JSON.stringify({id, ...message}));
         break;
       }
       case 'set': {
@@ -67,7 +67,7 @@ document.addEventListener('message', e => {
         const object = new constructors[constructor](...args);
         const message = toMessage({});
         targets[target] = object;
-        postMessage(JSON.stringify(({...{id}, ...message})));
+        postMessage(JSON.stringify({id, ...message}));
         break;
       }
       case 'listen': {
@@ -80,13 +80,13 @@ document.addEventListener('message', e => {
                 type: e.type,
               },
             });
-            postMessage(JSON.stringify(({...{id}, ...message})));
+            postMessage(JSON.stringify({id, ...message}));
           });
         }
         break;
       }
     }
   } catch (err) {
-    document.body.innerHTML = '<div class="error">' + err + '</div>';
+    document.body.innerHTML = `<div class="error">${err}</div>`;
   }
 });
