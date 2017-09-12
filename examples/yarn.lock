@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+"@types/node@^6.0.46":
+  version "6.0.88"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.88.tgz#f618f11a944f6a18d92b5c472028728a3e3d4b66"
+
 absolute-path@^0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/absolute-path/-/absolute-path-0.0.0.tgz#a78762fbdadfb5297be99b15d35a785b2f095bf7"
@@ -920,6 +924,10 @@ camelcase@^1.0.2:
 camelcase@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-3.0.0.tgz#32fc4b9fcdaf845fcdf7e73bb97cac2261f0ab0a"
+
+canvas-5-polyfill@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/canvas-5-polyfill/-/canvas-5-polyfill-0.1.5.tgz#2bc0a2c6b6da5fcd7f42aebc9566a1354c78ea14"
 
 caseless@~0.12.0:
   version "0.12.0"
@@ -2424,6 +2432,12 @@ parse-json@^2.2.0:
   dependencies:
     error-ex "^1.2.0"
 
+parse5@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/parse5/-/parse5-3.0.2.tgz#05eff57f0ef4577fb144a79f8b9a967a6cc44510"
+  dependencies:
+    "@types/node" "^6.0.46"
+
 parseurl@~1.3.0, parseurl@~1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/parseurl/-/parseurl-1.3.1.tgz#c8ab8c9223ba34888aa64a297b28853bec18da56"
@@ -2584,9 +2598,12 @@ react-devtools-core@2.3.1:
     shell-quote "^1.6.1"
     ws "^2.0.3"
 
-react-native-canvas@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/react-native-canvas/-/react-native-canvas-0.1.3.tgz#69d765c4a9017105a068b7f27ec882296b1a30ab"
+react-native-canvas@^0.1.10:
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/react-native-canvas/-/react-native-canvas-0.1.10.tgz#9f7e8fc5922deb967cee4582209bf6035298e6e2"
+  dependencies:
+    canvas-5-polyfill "^0.1.5"
+    parse5 "^3.0.2"
 
 react-native@0.46.4:
   version "0.46.4"

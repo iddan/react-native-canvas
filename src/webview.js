@@ -12,6 +12,40 @@ const flattenObject = object => {
   return flatObject;
 };
 
+class AutoScaledCanvas {
+  constructor(element) {
+    this.element = element;
+  }
+
+  toDataURL(...args) {
+    return this.element.toDataURL(...args);
+  }
+
+  autoScale() {
+    window.autoScaleCanvas(this.element);
+  }
+
+  get width() {
+    return this.element.width;
+  }
+
+  set width(value) {
+    this.element.width = value;
+    this.autoScale();
+    return value;
+  }
+
+  get height() {
+    return this.element.height;
+  }
+
+  set height(value) {
+    this.element.height = value;
+    this.autoScale();
+    return value;
+  }
+}
+
 const toMessage = result => {
   if (result instanceof Blob) {
     return {
@@ -26,9 +60,10 @@ const toMessage = result => {
 };
 
 const canvas = document.createElement('canvas');
+const autoScaledCanvas = new AutoScaledCanvas(canvas);
 
 const targets = {
-  canvas,
+  canvas: autoScaledCanvas,
   context2D: canvas.getContext('2d'),
 };
 
