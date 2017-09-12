@@ -1,16 +1,3 @@
-const canvas = document.createElement('canvas');
-document.body.appendChild(canvas);
-
-const targets = {
-  canvas,
-  context2D: canvas.getContext('2d'),
-};
-
-const constructors = {
-  Image,
-  Path2D,
-};
-
 const flattenObject = object => {
   if (typeof object !== 'object') {
     return object;
@@ -38,6 +25,18 @@ const toMessage = result => {
   };
 };
 
+const canvas = document.createElement('canvas');
+
+const targets = {
+  canvas,
+  context2D: canvas.getContext('2d'),
+};
+
+const constructors = {
+  Image,
+  Path2D,
+};
+
 const populateRefs = arg => {
   if (arg.__ref__) {
     return targets[arg.__ref__];
@@ -45,9 +44,11 @@ const populateRefs = arg => {
   return arg;
 };
 
+document.body.appendChild(canvas);
+
 document.addEventListener('message', e => {
-  const {id, type, payload} = JSON.parse(e.data);
   try {
+    const {id, type, payload} = JSON.parse(e.data);
     switch (type) {
       case 'exec': {
         const {target, method, args} = payload;

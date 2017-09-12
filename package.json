@@ -3,9 +3,8 @@
   "version": "0.1.9",
   "main": "dist/Canvas.js",
   "scripts": {
-    "start": "babel src --out-dir dist --copy-files --watch --source-maps",
-    "build": "babel src --out-dir dist --copy-files",
-    "build-to-example": "babel src --out-dir examples/node_modules/react-native-canvas/dist --copy-files --watch --source-maps",
+    "build": "babel src --out-dir dist --copy-files && node bundle-html.js ./dist/index.html",
+    "build-to-example": "babel src --out-dir examples/node_modules/react-native-canvas/dist --copy-files --source-maps && node bundle-html.js ./dist/index.html && cp dist/index.html.js examples/node_modules/react-native-canvas/dist/index.html.js",
     "prepare": "yarn build"
   },
   "devDependencies": {
@@ -18,7 +17,8 @@
     "prettier": "^1.5.3"
   },
   "dependencies": {
-    "canvas-5-polyfill": "^0.1.5"
+    "canvas-5-polyfill": "^0.1.5",
+    "parse5": "^3.0.2"
   },
   "repository": "https://github.com/iddan/react-native-canvas"
 }

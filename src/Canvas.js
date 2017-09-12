@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {View, WebView, ViewStylePropTypes} from 'react-native';
 import {webviewTarget, webviewProperties, webviewMethods} from './webview-binders';
 import CanvasRenderingContext2D from './CanvasRenderingContext2D';
+import html from './index.html.js';
 export {default as Image} from './Image';
 export {default as Path2D} from './Path2D';
 
@@ -124,10 +125,11 @@ export default class Canvas extends Component {
       <View style={{width, height, overflow: 'hidden', flex: 0, ...style}}>
         <WebView
           ref={this.handleRef}
-          style={{width, height, backgroundColor: 'transparent'}}
-          source={require('./index.html')}
+          style={{width, height, overflow: 'hidden', backgroundColor: 'transparent'}}
+          source={{html, baseUrl: '/'}}
           onMessage={this.handleMessage}
           onLoad={this.handleLoad}
+          scrollEnabled={false}
         />
       </View>
     );
