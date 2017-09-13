@@ -94,7 +94,12 @@ export const webviewEvents = types => target => {
   };
   target.prototype.addEventListener = function(type, callback) {
     this.addMessageListener((id, message) => {
-      if (message && message.type === 'event' && message.payload.type === type) {
+      if (
+        message &&
+        message.type === 'event' &&
+        message.payload.target[WEBVIEW_TARGET] === this[WEBVIEW_TARGET] &&
+        message.payload.type === type
+      ) {
         for (const key in message.payload.target) {
           const value = message.payload.target[key];
           if (key in this && this[key] !== value) {

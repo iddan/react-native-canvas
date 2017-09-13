@@ -113,7 +113,7 @@ function handleMessage(e) {
               type: 'event',
               payload: {
                 type: e.type,
-                target: flattenObject(targets[target]),
+                target: {...flattenObject(targets[target]), '@@WEBVIEW_TARGET': target},
               },
             });
             postMessage(JSON.stringify({id, ...message}));
