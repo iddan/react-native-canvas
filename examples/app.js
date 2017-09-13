@@ -114,7 +114,6 @@ class App extends Component {
       }
 
       // set refresh rate
-      console.log(img);
       return setInterval(draw, speed);
     });
 
