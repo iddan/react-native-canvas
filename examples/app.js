@@ -14,7 +14,7 @@ class App extends Component {
     context.fillRect(0, 0, 100, 100);
 
     const {width} = await context.measureText('yo');
-    console.log(width);
+    console.log('"yo" text rendering width', width);
   }
 
   handleRedCircle(canvas) {
