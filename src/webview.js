@@ -59,6 +59,14 @@ const toMessage = result => {
   };
 };
 
+// const print = (...args) => {
+//   const a = JSON.stringify({
+//     type: 'log',
+//     payload: args,
+//   });
+//   postMessage(a);
+// };
+
 const canvas = document.createElement('canvas');
 const autoScaledCanvas = new AutoScaledCanvas(canvas);
 
@@ -81,8 +89,7 @@ const populateRefs = arg => {
 
 document.body.appendChild(canvas);
 
-function handleMessage(message) {
-  const {id, type, payload} = message;
+function handleMessage({id, type, payload}) {
   switch (type) {
     case 'exec': {
       const {target, method, args} = payload;

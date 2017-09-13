@@ -93,7 +93,7 @@ export const webviewEvents = types => target => {
     });
   };
   target.prototype.addEventListener = function(type, callback) {
-    this.addMessageListener((id, message) => {
+    this.addMessageListener(message => {
       if (
         message &&
         message.type === 'event' &&

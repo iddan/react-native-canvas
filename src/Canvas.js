@@ -1,58 +1,12 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {View, WebView, ViewStylePropTypes} from 'react-native';
+import Bus from './Bus';
 import {webviewTarget, webviewProperties, webviewMethods} from './webview-binders';
 import CanvasRenderingContext2D from './CanvasRenderingContext2D';
 import html from './index.html.js';
 export {default as Image} from './Image';
 export {default as Path2D} from './Path2D';
-
-let _messageId = 0;
-
-class Bus {
-  queued = [];
-  paused = false;
-
-  constructor(send, listen) {
-    this._send = send;
-    this._listen = listen;
-  }
-
-  send = message =>
-    new Promise(resolve => {
-      const _id = ++_messageId;
-      const listener = (id, response) => {
-        if (id === _id) {
-          resolve(response);
-          unlisten();
-        }
-      };
-      listener.id = _id;
-      if (__DEV__) {
-        listener.stack = new Error().stack;
-      }
-      const unlisten = this._listen(listener);
-      if (this.paused) {
-        this.queued.push(() => {
-          this._send(JSON.stringify({id: _id, ...message}));
-        });
-      } else {
-        this._send(JSON.stringify({id: _id, ...message}));
-      }
-    });
-
-  pause = () => {
-    this.paused = true;
-  };
-
-  resume = () => {
-    this.paused = false;
-    for (const callback of this.queued) {
-      callback();
-    }
-    this.queued = [];
-  };
-}
 
 @webviewTarget('canvas')
 @webviewProperties({width: 300, height: 150})
@@ -75,8 +29,9 @@ export default class Canvas extends Component {
   /**
    * in the mounting process this.webview can be set to null
    */
-  webviewPostMessage = message => this.webview && this.webview.postMessage(message);
-  bus = new Bus(this.webviewPostMessage, this.addMessageListener);
+  webviewPostMessage = message => this.webview && this.webview.postMessage(JSON.stringify(message));
+
+  bus = new Bus(this.webviewPostMessage);
   listeners = [];
   context2D = new CanvasRenderingContext2D(this);
 
@@ -94,30 +49,38 @@ export default class Canvas extends Component {
     return null;
   };
 
-  postMessage = message => {
-    return this.bus.send(message);
+  postMessage = async message => {
+    const {stack} = new Error();
+    const {type, payload} = await this.bus.post({id: Math.random(), ...message});
+    switch (type) {
+      case 'error': {
+        const error = new Error(payload.message);
+        error.stack = stack;
+        throw error;
+      }
+      case 'json': {
+        return payload;
+      }
+      case 'blob': {
+        return atob(payload);
+      }
+    }
   };
 
   handleMessage = e => {
-    const {id, type, payload} = JSON.parse(e.nativeEvent.data);
-    for (const listener of this.listeners) {
-      switch (type) {
-        case 'error': {
-          if (id === listener.id) {
-            const error = new Error(payload.message);
-            error.stack = listener.stack;
-            throw error;
+    const data = JSON.parse(e.nativeEvent.data);
+    switch (data.type) {
+      case 'log': {
+        console.log(...data.payload);
+        break;
+      }
+      default: {
+        if (data.payload) {
+          for (const listener of this.listeners) {
+            listener(data.payload);
           }
-          break;
         }
-        case 'json': {
-          listener(id, payload);
-          break;
-        }
-        case 'blob': {
-          listener(id, atob(payload));
-          break;
-        }
+        this.bus.handle(data);
       }
     }
   };
