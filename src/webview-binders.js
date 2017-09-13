@@ -4,7 +4,10 @@ export const webviewTarget = targetName => target => {
   target.prototype[WEBVIEW_TARGET] = targetName;
 };
 
-const ID = () => Math.random().toString(32).slice(2);
+const ID = () =>
+  Math.random()
+    .toString(32)
+    .slice(2);
 
 export const webviewConstructor = constructorName => target => {
   const {onConstruction} = target.prototype;
@@ -92,6 +95,12 @@ export const webviewEvents = types => target => {
   target.prototype.addEventListener = function(type, callback) {
     this.addMessageListener((id, message) => {
       if (message && message.type === 'event' && message.payload.type === type) {
+        for (const key in message.payload.target) {
+          const value = message.payload.target[key];
+          if (key in this && this[key] !== value) {
+            this[key] = value;
+          }
+        }
         callback({
           ...message.payload,
           target: this,

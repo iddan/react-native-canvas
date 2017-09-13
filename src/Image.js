@@ -9,8 +9,12 @@ export default class Image {
     if (this.onConstruction) {
       this.onConstruction();
     }
-    this.width = width;
-    this.height = height;
+    if (this.width) {
+      this.width = width;
+    }
+    if (this.height) {
+      this.height = height;
+    }
   }
 
   postMessage = message => {

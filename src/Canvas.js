@@ -21,12 +21,17 @@ class Bus {
   send = message =>
     new Promise(resolve => {
       const _id = ++_messageId;
-      const unlisten = this._listen((id, response) => {
+      const listener = (id, response) => {
         if (id === _id) {
           resolve(response);
           unlisten();
         }
-      });
+      };
+      listener.id = _id;
+      if (__DEV__) {
+        listener.stack = new Error().stack;
+      }
+      const unlisten = this._listen(listener);
       if (this.paused) {
         this.queued.push(() => {
           this._send(JSON.stringify({id: _id, ...message}));
@@ -97,6 +102,14 @@ export default class Canvas extends Component {
     const {id, type, payload} = JSON.parse(e.nativeEvent.data);
     for (const listener of this.listeners) {
       switch (type) {
+        case 'error': {
+          if (id === listener.id) {
+            const error = new Error(payload.message);
+            error.stack = listener.stack;
+            throw error;
+          }
+          break;
+        }
         case 'json': {
           listener(id, payload);
           break;

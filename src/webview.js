@@ -73,7 +73,7 @@ const constructors = {
 };
 
 const populateRefs = arg => {
-  if (arg.__ref__) {
+  if (arg && arg.__ref__) {
     return targets[arg.__ref__];
   }
   return arg;
@@ -81,9 +81,9 @@ const populateRefs = arg => {
 
 document.body.appendChild(canvas);
 
-document.addEventListener('message', e => {
+function handleMessage(e) {
+  const {id, type, payload} = JSON.parse(e.data);
   try {
-    const {id, type, payload} = JSON.parse(e.data);
     switch (type) {
       case 'exec': {
         const {target, method, args} = payload;
@@ -113,6 +113,7 @@ document.addEventListener('message', e => {
               type: 'event',
               payload: {
                 type: e.type,
+                target: flattenObject(targets[target]),
               },
             });
             postMessage(JSON.stringify({id, ...message}));
@@ -122,6 +123,17 @@ document.addEventListener('message', e => {
       }
     }
   } catch (err) {
-    document.body.innerHTML = `<div class="error">${err}</div>`;
+    postMessage(
+      JSON.stringify({
+        id,
+        type: 'error',
+        payload: {
+          message: err.message,
+        },
+      }),
+    );
+    document.removeEventListener('message', handleMessage);
   }
-});
+}
+
+document.addEventListener('message', handleMessage);
