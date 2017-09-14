@@ -53,7 +53,7 @@ Returns a `Promise` that resolves to DataURL.
 
 #### CanvasRenderingContext2D
 
-Standard CanvasRenderingContext2D. [MDN](https://developer.mozilla.org/en/docs/Web/API/CanvasRenderingContext2D) but to retrieve values from methods use `await`
+Standard CanvasRenderingContext2D. [MDN](https://developer.mozilla.org/en/docs/Web/API/CanvasRenderingContext2D). Only difference is `await` should be used to retrieve values from methods.
 
 ```javascript
 const ctx = canvas.getContext('2d');
