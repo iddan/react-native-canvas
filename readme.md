@@ -3,7 +3,7 @@
 <h1>react-native-canvas</h1>
 </div>
 
-A canvas view for React Native.
+A Canvas component for React Native
 
 ```bash
 npm install react-native-canvas
@@ -53,7 +53,7 @@ Returns a `Promise` that resolves to DataURL.
 
 #### CanvasRenderingContext2D
 
-Standard CanvasRenderingContext2D. [MDN](https://developer.mozilla.org/en/docs/Web/API/CanvasRenderingContext2D)
+Standard CanvasRenderingContext2D. [MDN](https://developer.mozilla.org/en/docs/Web/API/CanvasRenderingContext2D) but to retrieve values from methods use `await`
 
 ```javascript
 const ctx = canvas.getContext('2d');
