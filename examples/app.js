@@ -47,6 +47,9 @@ class App extends Component {
     canvas.height = 100;
     const context = canvas.getContext('2d');
 
+    context.fillStyle = 'red';
+    context.fillRect(0, 0, 100, 100);
+
     const ellipse = new Path2D(canvas);
     ellipse.ellipse(50, 50, 25, 35, 45 * Math.PI / 180, 0, 2 * Math.PI);
     context.fillStyle = 'purple';
@@ -194,7 +197,7 @@ class App extends Component {
               <Canvas ref={this.handlePath} />
             </View>
             <View style={styles.exampleRight}>
-              <Image source={require('./images/image-rect.png')} style={{width: 100, height: 100}} />
+              <Image source={require('./images/path.png')} style={{width: 100, height: 100}} />
             </View>
           </View>
           <View style={styles.example}>
@@ -202,7 +205,7 @@ class App extends Component {
               <Canvas ref={this.handlePanorama} />
             </View>
             <View style={styles.exampleRight}>
-              <Image source={require('./images/image-rect.png')} style={{width: 100, height: 100}} />
+              <Image source={require('./images/panorama.png')} style={{width: 100, height: 100}} />
             </View>
           </View>
         </ScrollView>
