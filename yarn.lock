@@ -792,9 +792,13 @@ cryptiles@2.x.x:
   dependencies:
     boom "2.x.x"
 
-ctx-polyfill@^1.1.3:
+ctx-polyfill@lifaon74/ctx-polyfill:
   version "1.1.3"
-  resolved "https://registry.yarnpkg.com/ctx-polyfill/-/ctx-polyfill-1.1.3.tgz#07a0bc969e4fff3dbdfcac5ff5cff1eace4e1876"
+  resolved "https://codeload.github.com/lifaon74/ctx-polyfill/tar.gz/e8611965d308132f38ecca246c2ea80748dc5455"
+
+ctx-polyfill@lifaon74/ctx-polyfill#1/head:
+  version "1.1.3"
+  resolved "https://codeload.github.com/lifaon74/ctx-polyfill/tar.gz/3c2987c40a5f3b2dda564f54a9c359a7010161bd"
 
 dashdash@^1.12.0:
   version "1.14.1"
