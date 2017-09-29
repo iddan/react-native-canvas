@@ -15,7 +15,8 @@
     "babel-preset-react-native": "^2.1.0",
     "eslint": "^4.3.0",
     "eslint-config-fbjs-opensource": "^1.0.0",
-    "prettier": "^1.5.3"
+    "prettier": "^1.5.3",
+    "yarn": "^1.1.0"
   },
   "dependencies": {
     "ctx-polyfill": "lifaon74/ctx-polyfill",
