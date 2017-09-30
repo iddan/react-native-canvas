@@ -1,3 +1,10 @@
+const WEBVIEW_TARGET = '@@WEBVIEW_TARGET';
+
+const ID = () =>
+  Math.random()
+    .toString(32)
+    .slice(2);
+
 const flattenObject = object => {
   if (typeof object !== 'object') {
     return object;
@@ -51,11 +58,28 @@ const toMessage = result => {
     return {
       type: 'blob',
       payload: btoa(result),
+      meta: {},
+    };
+  }
+  if (result instanceof Object) {
+    if (!result[WEBVIEW_TARGET]) {
+      const id = ID();
+      result[WEBVIEW_TARGET] = id;
+      targets[id] = result;
+    }
+    return {
+      type: 'json',
+      payload: flattenObject(result),
+      meta: {
+        target: result[WEBVIEW_TARGET],
+        constructor: result.constructor.name,
+      },
     };
   }
   return {
     type: 'json',
-    payload: flattenObject(result),
+    payload: JSON.stringify(result),
+    meta: {},
   };
 };
 
@@ -100,7 +124,7 @@ function handleMessage({id, type, payload}) {
     }
     case 'set': {
       const {target, key, value} = payload;
-      targets[target][key] = value;
+      targets[target][key] = populateRefs(value);
       break;
     }
     case 'construct': {
@@ -119,7 +143,7 @@ function handleMessage({id, type, payload}) {
             type: 'event',
             payload: {
               type: e.type,
-              target: {...flattenObject(targets[target]), '@@WEBVIEW_TARGET': target},
+              target: {...flattenObject(targets[target]), [WEBVIEW_TARGET]: target},
             },
           });
           postMessage(JSON.stringify({id, ...message}));

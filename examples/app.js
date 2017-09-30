@@ -68,6 +68,17 @@ class App extends Component {
     context.restore();
   }
 
+  async handleGradient(canvas) {
+    canvas.width = 100;
+    canvas.height = 100;
+    const ctx = canvas.getContext('2d');
+    const gradient = await ctx.createLinearGradient(0, 0, 200, 0);
+    gradient.addColorStop(0, 'green');
+    gradient.addColorStop(1, 'white');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 100, 100);
+  }
+
   /**
    * Extracted from https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_animations
    */
@@ -195,6 +206,14 @@ class App extends Component {
           <View style={styles.example}>
             <View style={styles.exampleLeft}>
               <Canvas ref={this.handlePath} />
+            </View>
+            <View style={styles.exampleRight}>
+              <Image source={require('./images/path.png')} style={{width: 100, height: 100}} />
+            </View>
+          </View>
+          <View style={styles.example}>
+            <View style={styles.exampleLeft}>
+              <Canvas ref={this.handleGradient} />
             </View>
             <View style={styles.exampleRight}>
               <Image source={require('./images/path.png')} style={{width: 100, height: 100}} />

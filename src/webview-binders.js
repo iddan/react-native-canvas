@@ -1,4 +1,9 @@
-const WEBVIEW_TARGET = '@@WEBVIEW_TARGET';
+export const WEBVIEW_TARGET = '@@WEBVIEW_TARGET';
+
+/**
+ * @mutable
+ */
+export const constructors = {};
 
 export const webviewTarget = targetName => target => {
   target.prototype[WEBVIEW_TARGET] = targetName;
@@ -11,6 +16,7 @@ const ID = () =>
 
 export const webviewConstructor = constructorName => target => {
   const {onConstruction} = target.prototype;
+  constructors[constructorName] = target;
   /**
    * Arguments should be identical to the arguments passed to the constructor
    * just without the canvas instance

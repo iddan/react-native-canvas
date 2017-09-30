@@ -2,11 +2,12 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {View, WebView, Platform, ViewStylePropTypes} from 'react-native';
 import Bus from './Bus';
-import {webviewTarget, webviewProperties, webviewMethods} from './webview-binders';
+import {webviewTarget, webviewProperties, webviewMethods, constructors, WEBVIEW_TARGET} from './webview-binders';
 import CanvasRenderingContext2D from './CanvasRenderingContext2D';
 import html from './index.html.js';
 export {default as Image} from './Image';
 export {default as Path2D} from './Path2D';
+import './CanvasGradient';
 
 @webviewTarget('canvas')
 @webviewProperties({width: 300, height: 150})
@@ -68,7 +69,7 @@ export default class Canvas extends Component {
   };
 
   handleMessage = e => {
-    const data = JSON.parse(e.nativeEvent.data);
+    let data = JSON.parse(e.nativeEvent.data);
     switch (data.type) {
       case 'log': {
         console.log(...data.payload);
@@ -76,6 +77,14 @@ export default class Canvas extends Component {
       }
       default: {
         if (data.payload) {
+          const constructor = constructors[data.meta.constructor];
+          if (constructor) {
+            const {payload} = data;
+            data = {
+              ...data,
+              payload: Object.assign(new constructor(this), payload, {[WEBVIEW_TARGET]: data.meta.target}),
+            };
+          }
           for (const listener of this.listeners) {
             listener(data.payload);
           }
