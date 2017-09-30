@@ -5,8 +5,8 @@
   "scripts": {
     "build": "babel src --out-dir dist --copy-files && node bundle-html.js ./dist/index.html",
     "copy-to-example": "rsync -rv --exclude=.git --exclude node_modules --exclude examples --exclude dist . examples/node_modules/react-native-canvas",
-    "build-to-example": "npm run copy-to-example; cd examples/node_modules/react-native-canvas; yarn;",
-    "prepare": "yarn build"
+    "build-to-example": "npm run copy-to-example; cd examples/node_modules/react-native-canvas; npm install;",
+    "prepare": "npm run build"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
