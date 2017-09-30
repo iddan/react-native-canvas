@@ -1,6 +1,6 @@
 {
   "name": "react-native-canvas",
-  "version": "0.1.16",
+  "version": "0.1.17",
   "main": "dist/Canvas.js",
   "scripts": {
     "build": "babel src --out-dir dist --copy-files && node bundle-html.js ./dist/index.html",
