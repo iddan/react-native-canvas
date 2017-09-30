@@ -216,7 +216,7 @@ class App extends Component {
               <Canvas ref={this.handleGradient} />
             </View>
             <View style={styles.exampleRight}>
-              <Image source={require('./images/path.png')} style={{width: 100, height: 100}} />
+              <Image source={require('./images/gradient.png')} style={{width: 100, height: 100}} />
             </View>
           </View>
           <View style={styles.example}>
