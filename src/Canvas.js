@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {View, WebView, ViewStylePropTypes} from 'react-native';
+import {View, WebView, Platform, ViewStylePropTypes} from 'react-native';
 import Bus from './Bus';
 import {webviewTarget, webviewProperties, webviewMethods} from './webview-binders';
 import CanvasRenderingContext2D from './CanvasRenderingContext2D';
@@ -97,6 +97,24 @@ export default class Canvas extends Component {
   render() {
     const {width, height} = this;
     const {style} = this.props;
+    if (Platform.OS === 'android') {
+      return (
+        <View style={{width, height, overflow: 'hidden', flex: 0, ...style}}>
+          <WebView
+            ref={this.handleRef}
+            style={{width, height, overflow: 'hidden', backgroundColor: 'transparent'}}
+            source={{html}}
+            onMessage={this.handleMessage}
+            onLoad={this.handleLoad}
+            mixedContentMode="always"
+            scalesPageToFit={false}
+            javaScriptEnabled
+            domStorageEnabled
+            thirdPartyCookiesEnabled
+          />
+        </View>
+      );
+    }
     return (
       <View style={{width, height, overflow: 'hidden', flex: 0, ...style}}>
         <WebView
@@ -106,8 +124,7 @@ export default class Canvas extends Component {
           onMessage={this.handleMessage}
           onLoad={this.handleLoad}
           scrollEnabled={false}
-          javaScriptEnabled
-          domStorageEnabled
+          scalesPageToFit={false}
         />
       </View>
     );
