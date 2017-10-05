@@ -2,3 +2,4 @@ examples/
 node_modules/
 src/
 .babelrc
+bundle-html.js

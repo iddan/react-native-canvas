@@ -4,8 +4,8 @@
   "main": "dist/Canvas.js",
   "scripts": {
     "build": "babel src --out-dir dist --copy-files && node bundle-html.js ./dist/index.html",
-    "copy-to-example": "rsync -rv --exclude=.git --exclude node_modules --exclude examples --exclude dist . examples/node_modules/react-native-canvas",
-    "build-to-example": "npm run copy-to-example; cd examples/node_modules/react-native-canvas; npm install;",
+    "copy-to-example": "rsync -rv dist examples/node_modules/react-native-canvas",
+    "build-to-example": "npm run build; npm run copy-to-example;",
     "prepare": "npm run build"
   },
   "devDependencies": {
