@@ -102,6 +102,7 @@ const targets = {
 const constructors = {
   Image,
   Path2D,
+    ImageData,
 };
 
 const populateRefs = arg => {

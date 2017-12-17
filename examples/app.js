@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Image, ScrollView, StatusBar, Text, View, StyleSheet} from 'react-native';
 
-import Canvas, {Image as CanvasImage, Path2D} from 'react-native-canvas';
+import Canvas, {Image as CanvasImage, Path2D, ImageData} from 'react-native-canvas';
 
 class App extends Component {
   async handlePurpleRect(canvas) {
@@ -14,7 +14,24 @@ class App extends Component {
     context.fillRect(0, 0, 100, 100);
 
     const {width} = await context.measureText('yo');
-    console.log('"yo" text rendering width', width);
+
+      context.getImageData(0, 0, 100, 100)
+          .then((imageData) => {
+              const data = imageData.data;
+              const length = Object.keys(data).length;
+              for(let i = 0; i < length; i += 4) {
+                  data[i] += 100;
+                  data[i + 1] += 100;
+                  data[i + 2] += 100;
+              }
+
+              const tmp = new ImageData(data, 100, 100, canvas); // Or Uint8ClampedArray.from(data) here
+              context.putImageData(tmp, 0, 0);
+
+          });
+
+
+      console.log('"yo" text rendering width', width);
   }
 
   handleRedCircle(canvas) {
@@ -187,46 +204,46 @@ class App extends Component {
               <Image source={require('./images/purple-rect.png')} />
             </View>
           </View>
-          <View style={styles.example}>
-            <View style={styles.exampleLeft}>
-              <Canvas ref={this.handleRedCircle} />
-            </View>
-            <View style={styles.exampleRight}>
-              <Image source={require('./images/red-circle.png')} />
-            </View>
-          </View>
-          <View style={styles.example}>
-            <View style={styles.exampleLeft}>
-              <Canvas ref={this.handleImageRect} />
-            </View>
-            <View style={styles.exampleRight}>
-              <Image source={require('./images/image-rect.png')} style={{width: 100, height: 100}} />
-            </View>
-          </View>
-          <View style={styles.example}>
-            <View style={styles.exampleLeft}>
-              <Canvas ref={this.handlePath} />
-            </View>
-            <View style={styles.exampleRight}>
-              <Image source={require('./images/path.png')} style={{width: 100, height: 100}} />
-            </View>
-          </View>
-          <View style={styles.example}>
-            <View style={styles.exampleLeft}>
-              <Canvas ref={this.handleGradient} />
-            </View>
-            <View style={styles.exampleRight}>
-              <Image source={require('./images/gradient.png')} style={{width: 100, height: 100}} />
-            </View>
-          </View>
-          <View style={styles.example}>
-            <View style={styles.exampleLeft}>
-              <Canvas ref={this.handlePanorama} />
-            </View>
-            <View style={styles.exampleRight}>
-              <Image source={require('./images/panorama.png')} style={{width: 100, height: 100}} />
-            </View>
-          </View>
+          {/*<View style={styles.example}>*/}
+            {/*<View style={styles.exampleLeft}>*/}
+              {/*<Canvas ref={this.handleRedCircle} />*/}
+            {/*</View>*/}
+            {/*<View style={styles.exampleRight}>*/}
+              {/*<Image source={require('./images/red-circle.png')} />*/}
+            {/*</View>*/}
+          {/*</View>*/}
+          {/*<View style={styles.example}>*/}
+            {/*<View style={styles.exampleLeft}>*/}
+              {/*<Canvas ref={this.handleImageRect} />*/}
+            {/*</View>*/}
+            {/*<View style={styles.exampleRight}>*/}
+              {/*<Image source={require('./images/image-rect.png')} style={{width: 100, height: 100}} />*/}
+            {/*</View>*/}
+          {/*</View>*/}
+          {/*<View style={styles.example}>*/}
+            {/*<View style={styles.exampleLeft}>*/}
+              {/*<Canvas ref={this.handlePath} />*/}
+            {/*</View>*/}
+            {/*<View style={styles.exampleRight}>*/}
+              {/*<Image source={require('./images/path.png')} style={{width: 100, height: 100}} />*/}
+            {/*</View>*/}
+          {/*</View>*/}
+          {/*<View style={styles.example}>*/}
+            {/*<View style={styles.exampleLeft}>*/}
+              {/*<Canvas ref={this.handleGradient} />*/}
+            {/*</View>*/}
+            {/*<View style={styles.exampleRight}>*/}
+              {/*<Image source={require('./images/gradient.png')} style={{width: 100, height: 100}} />*/}
+            {/*</View>*/}
+          {/*</View>*/}
+          {/*<View style={styles.example}>*/}
+            {/*<View style={styles.exampleLeft}>*/}
+              {/*<Canvas ref={this.handlePanorama} />*/}
+            {/*</View>*/}
+            {/*<View style={styles.exampleRight}>*/}
+              {/*<Image source={require('./images/panorama.png')} style={{width: 100, height: 100}} />*/}
+            {/*</View>*/}
+          {/*</View>*/}
         </ScrollView>
       </View>
     );
