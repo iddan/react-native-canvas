@@ -10,7 +10,7 @@ export {default as Path2D} from './Path2D';
 import './CanvasGradient';
 
 @webviewTarget('canvas')
-@webviewProperties()
+@webviewProperties({})
 @webviewMethods(['toDataURL'])
 export default class Canvas extends Component {
   static propTypes = {
