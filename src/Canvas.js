@@ -36,10 +36,8 @@ export default class Canvas extends Component {
   listeners = [];
   context2D = new CanvasRenderingContext2D(this);
 
-  constructor({width = 300, height = 150}) {
+  constructor() {
     super();
-    this.width = width;
-    this.height = height;
     this.bus.pause();
   }
 
