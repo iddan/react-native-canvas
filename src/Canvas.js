@@ -10,7 +10,7 @@ export {default as Path2D} from './Path2D';
 import './CanvasGradient';
 
 @webviewTarget('canvas')
-@webviewProperties({width: 300, height: 150})
+@webviewProperties({})
 @webviewMethods(['toDataURL'])
 export default class Canvas extends Component {
   static propTypes = {
@@ -36,8 +36,12 @@ export default class Canvas extends Component {
   listeners = [];
   context2D = new CanvasRenderingContext2D(this);
 
-  constructor() {
-    super();
+  constructor(props = {}) {
+    super(props);
+    const {style = {}} = props;
+    const {width, height} = style;
+    this.width = width;
+    this.height = height;
     this.bus.pause();
   }
 
@@ -108,10 +112,10 @@ export default class Canvas extends Component {
     const {style} = this.props;
     if (Platform.OS === 'android') {
       return (
-        <View style={{width, height, overflow: 'hidden', flex: 0, ...style}}>
+        <View style={{...style, width, height}}>
           <WebView
             ref={this.handleRef}
-            style={{width, height, overflow: 'hidden', backgroundColor: 'transparent'}}
+            style={{width, height, backgroundColor: 'transparent'}}
             source={{html}}
             onMessage={this.handleMessage}
             onLoad={this.handleLoad}
@@ -125,10 +129,10 @@ export default class Canvas extends Component {
       );
     }
     return (
-      <View style={{width, height, overflow: 'hidden', flex: 0, ...style}}>
+      <View style={{ ...style, width, height}}>
         <WebView
           ref={this.handleRef}
-          style={{width, height, overflow: 'hidden', backgroundColor: 'transparent'}}
+          style={{width, height, backgroundColor: 'transparent'}}
           source={{html, baseUrl: '/'}}
           onMessage={this.handleMessage}
           onLoad={this.handleLoad}

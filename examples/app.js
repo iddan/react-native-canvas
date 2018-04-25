@@ -3,6 +3,29 @@ import {Image, ScrollView, StatusBar, Text, View, StyleSheet} from 'react-native
 
 import Canvas, {Image as CanvasImage, Path2D} from 'react-native-canvas';
 
+const MyCanvas = ({onRender, style = {}, ...rest}) => {
+  const width = style.width || 300;
+  const height = style.height || 150;
+  return (
+    <Canvas ref={onRender} {...{style: {...style, width, height}, ...rest}} />
+  );
+};
+
+const handleCanvas = (canvas) => {
+  const ctx = canvas.getContext('2d');
+  const ratio = 2;
+  ctx.width = canvas.width;
+  ctx.height = canvas.height;
+
+  ctx.width *= ratio;
+  ctx.height *= ratio;
+
+  ctx.fillStyle = 'purple';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.scale(ratio, ratio);
+  console.log('handleCanvas', canvas.width, canvas.height, ctx.width, ctx.height);
+};
+
 class App extends Component {
   async handlePurpleRect(canvas) {
     canvas.width = 100;
@@ -226,6 +249,9 @@ class App extends Component {
             <View style={styles.exampleRight}>
               <Image source={require('./images/panorama.png')} style={{width: 100, height: 100}} />
             </View>
+          </View>
+          <View style={styles.example}>
+            <MyCanvas onRender={handleCanvas} {...{style: {width: 320, height: 200}}}/>
           </View>
         </ScrollView>
       </View>
