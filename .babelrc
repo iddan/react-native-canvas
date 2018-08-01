@@ -4,5 +4,6 @@
   ],
   "plugins": [
     "babel-plugin-transform-decorators-legacy"
-  ]
+  ],
+  "comments": false
 }
