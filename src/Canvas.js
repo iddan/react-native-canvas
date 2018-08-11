@@ -15,6 +15,8 @@ import './CanvasGradient';
 export default class Canvas extends Component {
   static propTypes = {
     style: PropTypes.shape(ViewStylePropTypes),
+    baseUrl: PropTypes.string,
+    originWhitelist: PropTypes.arrayOf(PropTypes.string),
   };
 
   addMessageListener = listener => {
@@ -72,6 +74,7 @@ export default class Canvas extends Component {
     let data = JSON.parse(e.nativeEvent.data);
     switch (data.type) {
       case 'log': {
+        // eslint-disable-line no-console
         console.log(...data.payload);
         break;
       }
@@ -105,14 +108,15 @@ export default class Canvas extends Component {
 
   render() {
     const {width, height} = this;
-    const {style} = this.props;
+    const {style, baseUrl = '', originWhitelist = ['*']} = this.props;
     if (Platform.OS === 'android') {
       return (
         <View style={{width, height, overflow: 'hidden', flex: 0, ...style}}>
           <WebView
             ref={this.handleRef}
             style={{width, height, overflow: 'hidden', backgroundColor: 'transparent'}}
-            source={{html}}
+            source={{html, baseUrl}}
+            originWhitelist={originWhitelist}
             onMessage={this.handleMessage}
             onLoad={this.handleLoad}
             mixedContentMode="always"
