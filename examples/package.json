@@ -1,17 +1,18 @@
 {
-	"name": "reaft-native-canvas-examples",
-	"version": "0.0.1",
-	"private": true,
-	"scripts": {
-		"start": "node node_modules/react-native/local-cli/cli.js start"
-	},
-	"dependencies": {
-		"react": "16.0.0-alpha.12",
-		"react-native": "^0.48.4",
-		"react-native-canvas": "^0.1.20"
-	},
-	"devDependencies": {
-		"babel-jest": "20.0.3",
-		"babel-preset-react-native": "2.1.0"
-	}
+  "name": "reaft-native-canvas-examples",
+  "license": "MIT",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "react-native start"
+  },
+  "dependencies": {
+    "react": "16.4.1",
+    "react-native": "^0.56.0",
+    "react-native-canvas": "^0.1.20"
+  },
+  "devDependencies": {
+    "@babel/core": "7.0.0-beta.47",
+    "babel-preset-react-native": "^5.0.2"
+  }
 }

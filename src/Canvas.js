@@ -129,7 +129,7 @@ export default class Canvas extends Component {
         <WebView
           ref={this.handleRef}
           style={{width, height, overflow: 'hidden', backgroundColor: 'transparent'}}
-          source={{html, baseUrl: '/'}}
+          source={{html, baseUrl: 'http://example.com'}}
           onMessage={this.handleMessage}
           onLoad={this.handleLoad}
           scrollEnabled={false}

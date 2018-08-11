@@ -1,9 +1,12 @@
 {
-  "presets": [
-    "react-native"
-  ],
+  "presets": ["react-native"],
   "plugins": [
-    "babel-plugin-transform-decorators-legacy"
+    [
+      "@babel/plugin-proposal-decorators",
+      {
+        "legacy": true
+      }
+    ]
   ],
   "comments": false
 }
