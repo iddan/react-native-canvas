@@ -72,7 +72,7 @@ const toMessage = result => {
       payload: flattenObject(result),
       meta: {
         target: result[WEBVIEW_TARGET],
-        constructor: result.constructor.name,
+        constructor: result.__constructorName__ || result.constructor.name,
       },
     };
   }
@@ -102,7 +102,24 @@ const targets = {
 const constructors = {
   Image,
   Path2D,
+  CanvasGradient,
 };
+
+/**
+ * In iOS 9 constructors doesn't have bind defined which fails
+ * Babel object constructors utility function
+ */
+Image.bind =
+  Image.bind ||
+  function() {
+    return Image;
+  };
+
+Path2D.bind =
+  Path2D.bind ||
+  function() {
+    return Path2D;
+  };
 
 const populateRefs = arg => {
   if (arg && arg.__ref__) {
@@ -117,8 +134,22 @@ function handleMessage({id, type, payload}) {
   switch (type) {
     case 'exec': {
       const {target, method, args} = payload;
+
       const result = targets[target][method](...args.map(populateRefs));
       const message = toMessage(result);
+
+      /**
+       * In iOS 9 some classes name are not defined so we compare to
+       * known constructors to find the name.
+       */
+      if (typeof result === 'object' && !message.meta.constructor) {
+        for (const constructorName in constructors) {
+          if (result instanceof constructors[constructorName]) {
+            message.meta.constructor = constructorName;
+          }
+        }
+      }
+
       postMessage(JSON.stringify({id, ...message}));
       break;
     }
@@ -130,6 +161,7 @@ function handleMessage({id, type, payload}) {
     case 'construct': {
       const {constructor, id: target, args = []} = payload;
       const object = new constructors[constructor](...args);
+      object.__constructorName__ = constructor;
       const message = toMessage({});
       targets[target] = object;
       postMessage(JSON.stringify({id, ...message}));

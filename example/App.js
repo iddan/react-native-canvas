@@ -12,7 +12,7 @@ const Example = ({sample, children}) => (
   </View>
 );
 
-class App extends Component {
+export default class App extends Component {
   async handlePurpleRect(canvas) {
     canvas.width = 100;
     canvas.height = 100;
@@ -49,7 +49,7 @@ class App extends Component {
     });
   }
 
-  async handlePath(canvas) {
+  handlePath(canvas) {
     canvas.width = 100;
     canvas.height = 100;
     const context = canvas.getContext('2d');
@@ -181,7 +181,7 @@ class App extends Component {
     const svgString = `
 <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">
     <foreignObject width="100%" height="100%">
-        <div xmlns="http://www.w3.org/1999/xhtml" style="font-size: 40px; background: lightblue; height: 100%;">
+        <div xmlns="http://www.w3.org/1999/xhtml" style="font-size: 40px; background: lightblue; width: 100vw; height: 100vh;">
           <span style="background: pink;">
             ${htmlString}
           </span>
@@ -272,5 +272,3 @@ const styles = StyleSheet.create({
     ...cell,
   },
 });
-
-export default App;

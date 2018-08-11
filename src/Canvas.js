@@ -78,6 +78,9 @@ export default class Canvas extends Component {
         console.log(...data.payload);
         break;
       }
+      case 'error': {
+        throw new Error(data.payload.message);
+      }
       default: {
         if (data.payload) {
           const constructor = constructors[data.meta.constructor];
