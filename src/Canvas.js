@@ -127,6 +127,7 @@ export default class Canvas extends Component {
             javaScriptEnabled
             domStorageEnabled
             thirdPartyCookiesEnabled
+            allowUniversalAccessFromFileURLs
           />
         </View>
       );
@@ -136,7 +137,8 @@ export default class Canvas extends Component {
         <WebView
           ref={this.handleRef}
           style={{width, height, overflow: 'hidden', backgroundColor: 'transparent'}}
-          source={{html, baseUrl: 'http://example.com'}}
+          source={{html, baseUrl}}
+          originWhitelist={originWhitelist}
           onMessage={this.handleMessage}
           onLoad={this.handleLoad}
           scrollEnabled={false}
