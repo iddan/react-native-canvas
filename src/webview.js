@@ -29,6 +29,10 @@ class AutoScaledCanvas {
   }
 
   autoScale() {
+    if (this.savedHeight !== undefined)
+      this.element.height = this.savedHeight;
+    if (this.savedWidth !== undefined)
+      this.element.width = this.savedWidth;
     window.autoScaleCanvas(this.element);
   }
 
@@ -37,7 +41,7 @@ class AutoScaledCanvas {
   }
 
   set width(value) {
-    this.element.width = value;
+    this.savedWidth = value;
     this.autoScale();
     return value;
   }
@@ -47,7 +51,7 @@ class AutoScaledCanvas {
   }
 
   set height(value) {
-    this.element.height = value;
+    this.savedHeight = value;
     this.autoScale();
     return value;
   }
