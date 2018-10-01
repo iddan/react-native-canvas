@@ -882,9 +882,9 @@ core-util-is@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
 
-ctx-polyfill@lifaon74/ctx-polyfill:
+ctx-polyfill@^1.1.4:
   version "1.1.4"
-  resolved "https://codeload.github.com/lifaon74/ctx-polyfill/tar.gz/f39f2d22be29dc87f211e1c363edb324bee173b4"
+  resolved "https://registry.yarnpkg.com/ctx-polyfill/-/ctx-polyfill-1.1.4.tgz#08420bc5c540d08ac36d05720ca503c65e302d65"
 
 d@1:
   version "1.0.0"
