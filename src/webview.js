@@ -11,7 +11,12 @@ const flattenObject = object => {
   }
   const flatObject = {};
   for (const key in object) {
-    flatObject[key] = object[key];
+    const constructorType = object[key].constructor;
+    if (convertToArray.includes(constructorType)) {
+      flatObject[key] = Array.from(object[key]);
+    } else {
+      flatObject[key] = object[key];
+    }
   }
   for (const key in Object.getOwnPropertyNames(object)) {
     flatObject[key] = object[key];
@@ -107,7 +112,13 @@ const constructors = {
   Image,
   Path2D,
   CanvasGradient,
+  ImageData,
+  Uint8ClampedArray,
 };
+
+const convertToArray = [
+  Uint8ClampedArray,
+];
 
 /**
  * In iOS 9 constructors doesn't have bind defined which fails
@@ -125,6 +136,18 @@ Path2D.bind =
     return Path2D;
   };
 
+ImageData.bind =
+  ImageData.bind ||
+    function() {
+      return ImageData;
+    };
+
+Uint8ClampedArray.bind =
+  Uint8ClampedArray.bind ||
+    function() {
+      return Uint8ClampedArray;
+    };
+
 const populateRefs = arg => {
   if (arg && arg.__ref__) {
     return targets[arg.__ref__];
@@ -138,7 +161,6 @@ function handleMessage({id, type, payload}) {
   switch (type) {
     case 'exec': {
       const {target, method, args} = payload;
-
       const result = targets[target][method](...args.map(populateRefs));
       const message = toMessage(result);
 
@@ -164,6 +186,12 @@ function handleMessage({id, type, payload}) {
     }
     case 'construct': {
       const {constructor, id: target, args = []} = payload;
+      const isTypeInArgs = args.findIndex(e => { return e.type; });
+      if (isTypeInArgs !== -1) {
+        const constructorType = args[isTypeInArgs].type;
+        const params = args[isTypeInArgs].params;
+        args[isTypeInArgs] = new constructors[constructorType](...params);
+      }
       const object = new constructors[constructor](...args);
       object.__constructorName__ = constructor;
       const message = toMessage({});

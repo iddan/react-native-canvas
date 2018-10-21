@@ -2195,7 +2195,7 @@ cssstyle@^1.0.0:
   dependencies:
     cssom "0.3.x"
 
-"ctx-polyfill@github:lifaon74/ctx-polyfill":
+ctx-polyfill@lifaon74/ctx-polyfill:
   version "1.1.4"
   resolved "https://codeload.github.com/lifaon74/ctx-polyfill/tar.gz/f39f2d22be29dc87f211e1c363edb324bee173b4"
 

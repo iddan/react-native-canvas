@@ -6,8 +6,7 @@
   "scripts": {
     "build": "babel src --out-dir dist --copy-files --compact false && node bundle-html.js ./dist/index.html",
     "copy-to-example": "rsync -rv dist example/node_modules/react-native-canvas",
-    "build-to-example": "npm run build; npm run copy-to-example;",
-    "prepare": "npm run build"
+    "build-to-example": "npm run build; npm run copy-to-example;"
   },
   "devDependencies": {
     "@babel/cli": "7.0.0-beta.47",
