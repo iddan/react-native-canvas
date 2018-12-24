@@ -13,7 +13,7 @@ const Example = ({sample, children}) => (
 );
 
 export default class App extends Component {
-  async handleImageData(canvas) {
+  handleImageData(canvas) {
     canvas.width = 100;
     canvas.height = 100;
 
@@ -22,7 +22,7 @@ export default class App extends Component {
     context.fillRect(0, 0, 100, 100);
 
     context.getImageData(0, 0, 100, 100)
-      .then((imageData) => {
+      .then(imageData => {
         const data = Object.values(imageData.data);
         const length = Object.keys(data).length;
         for (let i = 0; i < length; i += 4) {

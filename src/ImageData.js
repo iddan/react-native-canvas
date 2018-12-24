@@ -9,11 +9,7 @@ export default class ImageData {
     }
     this.canvas = canvas;
     if (this.onConstruction) {
-      const typedArray = {
-        type: 'Uint8ClampedArray',
-        params: [array],
-      };
-      this.onConstruction(typedArray, width, height);
+      this.onConstruction(array, width, height);
     }
   }
 

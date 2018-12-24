@@ -7,7 +7,6 @@ import CanvasRenderingContext2D from './CanvasRenderingContext2D';
 import html from './index.html.js';
 export {default as Image} from './Image';
 export {default as ImageData} from './ImageData';
-export {default as Uint8ClampedArray} from './Uint8ClampedArray';
 export {default as Path2D} from './Path2D';
 import './CanvasGradient';
 
@@ -87,13 +86,7 @@ export default class Canvas extends Component {
         if (data.payload) {
           const constructor = constructors[data.meta.constructor];
           if (constructor) {
-            const {payload} = data;
-            const args = [];
-            for (const key in payload) {
-              if (key !== '@@WEBVIEW_TARGET') {
-                args.push(payload[key]);
-              }
-            }
+            const {args, payload} = data;
             data = {
               ...data,
               payload: Object.assign(new constructor(this, ...args), payload, {[WEBVIEW_TARGET]: data.meta.target}),
