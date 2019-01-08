@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Image, ScrollView, StatusBar, Text, View, StyleSheet} from 'react-native';
 
-import Canvas, {Image as CanvasImage, Path2D} from 'react-native-canvas';
+import Canvas, {Image as CanvasImage, Path2D, ImageData} from 'react-native-canvas';
 
 const Example = ({sample, children}) => (
   <View style={styles.example}>
@@ -13,6 +13,28 @@ const Example = ({sample, children}) => (
 );
 
 export default class App extends Component {
+  handleImageData(canvas) {
+    canvas.width = 100;
+    canvas.height = 100;
+
+    const context = canvas.getContext('2d');
+    context.fillStyle = 'purple';
+    context.fillRect(0, 0, 100, 100);
+
+    context.getImageData(0, 0, 100, 100)
+      .then(imageData => {
+        const data = Object.values(imageData.data);
+        const length = Object.keys(data).length;
+        for (let i = 0; i < length; i += 4) {
+          data[i] = 0;
+          data[i + 1] = 0;
+          data[i + 2] = 0;
+        }
+        const imgData = new ImageData(canvas, data, 100, 100);
+        context.putImageData(imgData, 0, 0);
+      });
+  }
+
   async handlePurpleRect(canvas) {
     canvas.width = 100;
     canvas.height = 100;
@@ -201,14 +223,9 @@ export default class App extends Component {
       <View style={styles.container}>
         <StatusBar hidden={true} />
         <ScrollView style={styles.examples}>
-          <View style={styles.example}>
-            <View style={styles.exampleLeft}>
-              <Text>Example</Text>
-            </View>
-            <View style={styles.exampleRight}>
-              <Text>Sample</Text>
-            </View>
-          </View>
+          <Example sample={require('./images/purple-black-rect.png')}>
+            <Canvas ref={this.handleImageData} />
+          </Example>
           <Example sample={require('./images/purple-rect.png')}>
             <Canvas ref={this.handlePurpleRect} />
           </Example>

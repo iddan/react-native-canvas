@@ -14,6 +14,20 @@ const ID = () =>
     .toString(32)
     .slice(2);
 
+/**
+ * These are where objects need other objects as an argument.
+ * Because when the data is sent as JSON it removes the class.
+ *
+ * One example being ImageData which requires the Uint8ClampedArray
+ * object as the first parameter.
+ */
+const SPECIAL_CONSTRUCTOR = {
+  ImageData: {
+    className: 'Uint8ClampedArray',
+    paramNum: 0,
+  },
+};
+
 export const webviewConstructor = constructorName => target => {
   const {onConstruction} = target.prototype;
   constructors[constructorName] = target;
@@ -24,6 +38,11 @@ export const webviewConstructor = constructorName => target => {
   target.prototype.onConstruction = function(...args) {
     if (onConstruction) {
       onConstruction.call(this);
+    }
+
+    if (SPECIAL_CONSTRUCTOR[constructorName] !== undefined) {
+      const {className, paramNum} = SPECIAL_CONSTRUCTOR[constructorName];
+      args[paramNum] = {className, classArgs: [args[paramNum]]};
     }
     this[WEBVIEW_TARGET] = ID();
     this.postMessage({
