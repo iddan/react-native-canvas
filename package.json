@@ -14,14 +14,14 @@
     "@babel/core": "7.0.0-beta.47",
     "@babel/plugin-proposal-decorators": "7.0.0-beta.47",
     "babel-preset-react-native": "^5.0.2",
-    "react-native-webview": "^5.2.0",
     "eslint": "^3",
     "eslint-config-fbjs-opensource": "^1.0.0",
     "parse5": "^5.0.0",
     "prettier": "^1.14.2"
   },
   "dependencies": {
-    "ctx-polyfill": "^1.1.4"
+    "ctx-polyfill": "^1.1.4",
+    "react-native-webview": "^5.2.0"
   },
   "repository": "https://github.com/iddan/react-native-canvas"
 }
