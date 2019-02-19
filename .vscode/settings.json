@@ -1,9 +1,0 @@
-{
-  "prettier.singleQuote": true,
-  "prettier.trailingComma": "always",
-  "javascript.validate.enable": false,
-  "prettier.eslintIntegration": true,
-  "[javascriptreact]": {
-    "editor.formatOnSave": true
-  }
-}
