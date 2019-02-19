@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {View, WebView, Platform, ViewStylePropTypes} from 'react-native';
+import {View, Platform, ViewStylePropTypes} from 'react-native';
+import {WebView} from 'react-native-webview';
 import Bus from './Bus';
 import {webviewTarget, webviewProperties, webviewMethods, constructors, WEBVIEW_TARGET} from './webview-binders';
 import CanvasRenderingContext2D from './CanvasRenderingContext2D';
