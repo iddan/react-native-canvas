@@ -57,6 +57,27 @@ class AutoScaledCanvas {
     this.autoScale();
     return value;
   }
+
+  initFonts(fonts = []) {
+    return Promise
+      .all(fonts.map(font => this.addFont(font)));
+  }
+
+  addFont(font) {
+    const {
+      name,
+      link,
+      options: {
+        style = 'normal',
+        weight = 500,
+      } = {},
+    } = font;
+    return new Promise((resolve) => {
+      const fontFace = new FontFace(name, `url(${link})`, { style, weight }); \
+      document.fonts.onloadingdone = resolve;
+      document.fonts.add(fontFace)
+    });
+  }
 }
 
 const toMessage = result => {

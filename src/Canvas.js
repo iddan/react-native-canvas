@@ -12,7 +12,7 @@ import './CanvasGradient';
 
 @webviewTarget('canvas')
 @webviewProperties({width: 300, height: 150})
-@webviewMethods(['toDataURL'])
+@webviewMethods(['toDataURL', 'initFonts', 'addFont'])
 export default class Canvas extends Component {
   static propTypes = {
     style: PropTypes.shape(ViewStylePropTypes),
