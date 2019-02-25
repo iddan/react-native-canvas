@@ -144,7 +144,6 @@ export default class Canvas extends Component {
           onMessage={this.handleMessage}
           onLoad={this.handleLoad}
           scrollEnabled={false}
-          scalesPageToFit={false}
         />
       </View>
     );
