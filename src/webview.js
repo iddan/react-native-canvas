@@ -293,4 +293,7 @@ function handleIncomingMessage(e) {
   }
 }
 
+// iOS
 window.addEventListener('message', handleIncomingMessage);
+// Android
+document.addEventListener('message', handleIncomingMessage);
