@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {View, Platform, ViewStylePropTypes} from 'react-native';
+import {View, Platform, ViewStylePropTypes, StyleSheet} from 'react-native';
 import {WebView} from 'react-native-webview';
 import Bus from './Bus';
 import {webviewTarget, webviewProperties, webviewMethods, constructors, WEBVIEW_TARGET} from './webview-binders';
@@ -10,6 +10,15 @@ export {default as Image} from './Image';
 export {default as ImageData} from './ImageData';
 export {default as Path2D} from './Path2D';
 import './CanvasGradient';
+
+const stylesheet = StyleSheet.create({
+  container: {overflow: 'hidden', flex: 0},
+  webview: {
+    overflow: 'hidden',
+    backgroundColor: 'transparent',
+    flex: 0,
+  },
+});
 
 @webviewTarget('canvas')
 @webviewProperties({width: 300, height: 150})
@@ -116,10 +125,10 @@ export default class Canvas extends Component {
     const {style, baseUrl = '', originWhitelist = ['*']} = this.props;
     if (Platform.OS === 'android') {
       return (
-        <View style={{width, height, overflow: 'hidden', flex: 0, ...style}}>
+        <View style={[stylesheet.container, {width, height}, style]}>
           <WebView
             ref={this.handleRef}
-            style={{width, height, overflow: 'hidden', backgroundColor: 'transparent'}}
+            style={[stylesheet.webview, {height, width}]}
             source={{html, baseUrl}}
             originWhitelist={originWhitelist}
             onMessage={this.handleMessage}
@@ -135,10 +144,10 @@ export default class Canvas extends Component {
       );
     }
     return (
-      <View style={{width, height, overflow: 'hidden', flex: 0, ...style}}>
+      <View style={[stylesheet.container, {width, height}, style]}>
         <WebView
           ref={this.handleRef}
-          style={{width, height, overflow: 'hidden', backgroundColor: 'transparent'}}
+          style={[stylesheet.webview, {height, width}]}
           source={{html, baseUrl}}
           originWhitelist={originWhitelist}
           onMessage={this.handleMessage}
