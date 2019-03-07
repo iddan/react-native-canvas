@@ -73,7 +73,7 @@ class AutoScaledCanvas {
       } = {},
     } = font;
     return new Promise((resolve) => {
-      const fontFace = new FontFace(name, `url(${link})`, { style, weight }); \
+      const fontFace = new FontFace(name, `url(${link})`, { style, weight });
       document.fonts.onloadingdone = resolve;
       document.fonts.add(fontFace)
     });
