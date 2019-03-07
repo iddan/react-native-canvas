@@ -38,7 +38,13 @@ export default class Bus {
    * @return {void}
    */
   handle(message) {
-    this._messageListeners[message.id](message);
+    const handler = this._messageListeners[message.id];
+    if (handler) {
+      handler(message);
+    }
+    else {
+      console.warn('Received unexpected message', message);
+    }
   }
   /**
    * @returns {void}
