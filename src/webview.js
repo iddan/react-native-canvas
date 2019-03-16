@@ -162,13 +162,13 @@ const createObjectsFromArgs = args => {
   return args;
 };
 
-// const print = (...args) => {
-//   const a = JSON.stringify({
-//     type: 'log',
-//     payload: args,
-//   });
-//   postMessage(a);
-// };
+const print = (...args) => {
+  const message = JSON.stringify({
+    type: 'log',
+    payload: args,
+  });
+  window.ReactNativeWebView.postMessage(message);
+};
 
 const canvas = document.createElement('canvas');
 const autoScaledCanvas = new AutoScaledCanvas(canvas);
@@ -245,7 +245,7 @@ function handleMessage({id, type, payload}) {
           }
         }
       }
-      postMessage(JSON.stringify({id, ...message}));
+      window.ReactNativeWebView.postMessage(JSON.stringify({id, ...message}));
       break;
     }
     case 'set': {
@@ -260,7 +260,7 @@ function handleMessage({id, type, payload}) {
       object.__constructorName__ = constructor;
       const message = toMessage({});
       targets[target] = object;
-      postMessage(JSON.stringify({id, ...message}));
+      window.ReactNativeWebView.postMessage(JSON.stringify({id, ...message}));
       break;
     }
     case 'listen': {
@@ -274,7 +274,7 @@ function handleMessage({id, type, payload}) {
               target: {...flattenObject(targets[target]), [WEBVIEW_TARGET]: target},
             },
           });
-          postMessage(JSON.stringify({id, ...message}));
+          window.ReactNativeWebView.postMessage(JSON.stringify({id, ...message}));
         });
       }
       break;
@@ -283,7 +283,7 @@ function handleMessage({id, type, payload}) {
 }
 
 const handleError = (err, message) => {
-  postMessage(
+  window.ReactNativeWebView.postMessage(
     JSON.stringify({
       id: message.id,
       type: 'error',
@@ -314,4 +314,7 @@ function handleIncomingMessage(e) {
   }
 }
 
+// iOS
+window.addEventListener('message', handleIncomingMessage);
+// Android
 document.addEventListener('message', handleIncomingMessage);

@@ -65,7 +65,7 @@ export default class App extends Component {
 
     const context = canvas.getContext('2d');
 
-    image.src = 'https://image.freepik.com/free-vector/unicorn-background-design_1324-79.jpg';
+    image.src = 'https://upload.wikimedia.org/wikipedia/commons/6/63/Biho_Takashi._Bat_Before_the_Moon%2C_ca._1910.jpg';
     image.addEventListener('load', () => {
       context.drawImage(image, 0, 0, 100, 100);
     });
@@ -103,93 +103,6 @@ export default class App extends Component {
     gradient.addColorStop(1, 'white');
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, 100, 100);
-  }
-
-  /**
-   * Extracted from https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_animations
-   */
-  handlePanorama(canvas) {
-    const CanvasXSize = 100;
-    const CanvasYSize = 100;
-    canvas.width = CanvasXSize;
-    canvas.height = CanvasYSize;
-    const ctx = canvas.getContext('2d');
-    const img = new CanvasImage(canvas);
-
-    // User Variables - customize these to change the image being scrolled, its
-    // direction, and the speed.
-
-    img.src = 'https://mdn.mozillademos.org/files/4553/Capitan_Meadows,_Yosemite_National_Park.jpg';
-    const speed = 30; // lower is faster
-    const scale = 1.05;
-    const y = -4.5; // vertical offset
-
-    // Main program
-
-    const dx = 0.75;
-    let imgW;
-    let imgH;
-    let x = 0;
-    let clearX;
-    let clearY;
-
-    img.addEventListener('load', () => {
-      imgW = img.width * scale;
-      imgH = img.height * scale;
-
-      if (imgW > CanvasXSize) {
-        x = CanvasXSize - imgW;
-      } // image larger than canvas
-      if (imgW > CanvasXSize) {
-        clearX = imgW;
-      } else {
-        // image width larger than canvas
-        clearX = CanvasXSize;
-      }
-      if (imgH > CanvasYSize) {
-        clearY = imgH;
-      } else {
-        // image height larger than canvas
-        clearY = CanvasYSize;
-      }
-
-      // set refresh rate
-      return setInterval(draw, speed);
-    });
-
-    function draw() {
-      ctx.clearRect(0, 0, clearX, clearY); // clear the canvas
-
-      // if image is <= Canvas Size
-      if (imgW <= CanvasXSize) {
-        // reset, start from beginning
-        if (x > CanvasXSize) {
-          x = -imgW + x;
-        }
-        // draw additional image1
-        if (x > 0) {
-          ctx.drawImage(img, -imgW + x, y, imgW, imgH);
-        }
-        // draw additional image2
-        if (x - imgW > 0) {
-          ctx.drawImage(img, -imgW * 2 + x, y, imgW, imgH);
-        }
-      } else {
-        // if image is > Canvas Size
-        // reset, start from beginning
-        if (x > CanvasXSize) {
-          x = CanvasXSize - imgW;
-        }
-        // draw additional image
-        if (x > CanvasXSize - imgW) {
-          ctx.drawImage(img, x - imgW + 1, y, imgW, imgH);
-        }
-      }
-      // draw image
-      ctx.drawImage(img, x, y, imgW, imgH);
-      // amount to move
-      x += dx;
-    }
   }
 
   handleEmbedHTML(canvas) {
@@ -266,9 +179,6 @@ export default class App extends Component {
           <Example sample={require('./images/gradient.png')}>
             <Canvas ref={this.handleGradient} />
           </Example>
-          <Example sample={require('./images/panorama.png')}>
-            <Canvas ref={this.handlePanorama} />
-          </Example>
           <Example sample={require('./images/embed-html.png')}>
             <Canvas ref={this.handleEmbedHTML} />
           </Example>
@@ -298,6 +208,7 @@ const cell = {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: 'white',
     ...full,
   },
   examples: {
