@@ -5,7 +5,6 @@ import {webviewConstructor, webviewMethods} from './webview-binders';
  */
 @webviewMethods([
   'addPath',
-  'closePath',
   'moveTo',
   'lineTo',
   'bezierCurveTo',
