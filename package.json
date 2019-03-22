@@ -20,8 +20,10 @@
     "prettier": "^1.14.2"
   },
   "dependencies": {
-    "ctx-polyfill": "^1.1.4",
-    "react-native-webview": "^5.4.0"
+    "ctx-polyfill": "^1.1.4"
+  },
+  "peerDependencies": {
+    "react-native-webview": ">=5.0.1"
   },
   "repository": "https://github.com/iddan/react-native-canvas"
 }
