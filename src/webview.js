@@ -14,7 +14,7 @@ const flattenObjectCopyValue = (flatObj, srcObj, key) => {
     return;
   }
   flatObj[key] = flattenObject(value);
-}
+};
 
 const flattenObject = object => {
   if (typeof object !== 'object' || object === null) {
@@ -136,18 +136,16 @@ const toMessage = result => {
  * `webview-binders.js`.
  *
  */
-const toArgs = result => {
-  const args = [];
-  for (const key in result) {
-    if (result[key] !== undefined && key !== '@@WEBVIEW_TARGET') {
-      if (typedArrays[result[key].constructor.name] !== undefined) {
-        result[key] = Array.from(result[key]);
-      }
-      args.push(result[key]);
+const toArgs = result => Object
+  .entries(result)
+  .filter(([key, value]) => !(value === undefined || key === '@@WEBVIEW_TARGET'))
+  .map(([, value]) => {
+    if (typedArrays[value.constructor.name] !== undefined) {
+      return Array.from(value);
     }
-  }
-  return args;
-};
+
+    return value;
+  });
 
 /**
  * Creates objects from args. If any argument have the object
