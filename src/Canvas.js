@@ -59,8 +59,11 @@ export default class Canvas extends Component {
       case '2d': {
         return this.context2D;
       }
+
+      default: {
+        return null;
+      }
     }
-    return null;
   };
 
   postMessage = async message => {
