@@ -5,16 +5,27 @@ const ID = () =>
     .toString(32)
     .slice(2);
 
+const flattenObjectCopyValue = (flatObj, srcObj, key) => {
+  const value = srcObj[key];
+  if (typeof value === 'function') {
+    return;
+  }
+  if (typeof value === 'object' && value instanceof Node) {
+    return;
+  }
+  flatObj[key] = flattenObject(value);
+}
+
 const flattenObject = object => {
-  if (typeof object !== 'object') {
+  if (typeof object !== 'object' || object === null) {
     return object;
   }
   const flatObject = {};
   for (const key in object) {
-    flatObject[key] = object[key];
+    flattenObjectCopyValue(flatObject, object, key);
   }
   for (const key in Object.getOwnPropertyNames(object)) {
-    flatObject[key] = object[key];
+    flattenObjectCopyValue(flatObject, object, key);
   }
   return flatObject;
 };
