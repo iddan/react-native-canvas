@@ -21,18 +21,17 @@ export default class App extends Component {
     context.fillStyle = 'purple';
     context.fillRect(0, 0, 100, 100);
 
-    context.getImageData(0, 0, 100, 100)
-      .then(imageData => {
-        const data = Object.values(imageData.data);
-        const length = Object.keys(data).length;
-        for (let i = 0; i < length; i += 4) {
-          data[i] = 0;
-          data[i + 1] = 0;
-          data[i + 2] = 0;
-        }
-        const imgData = new ImageData(canvas, data, 100, 100);
-        context.putImageData(imgData, 0, 0);
-      });
+    context.getImageData(0, 0, 100, 100).then(imageData => {
+      const data = Object.values(imageData.data);
+      const length = Object.keys(data).length;
+      for (let i = 0; i < length; i += 4) {
+        data[i] = 0;
+        data[i + 1] = 0;
+        data[i + 2] = 0;
+      }
+      const imgData = new ImageData(canvas, data, 100, 100);
+      context.putImageData(imgData, 0, 0);
+    });
   }
 
   async handlePurpleRect(canvas) {

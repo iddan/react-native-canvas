@@ -5,12 +5,12 @@ import {webviewConstructor, webviewProperties, webviewEvents} from './webview-bi
 @webviewEvents(['load', 'error'])
 @webviewConstructor('Image')
 export default class Image {
-  constructor(canvas, width, height) {
+  constructor(canvas, width, height, noOnConstruction) {
     if (!(canvas instanceof Canvas)) {
       throw new Error('Image must be initialized with a Canvas instance');
     }
     this.canvas = canvas;
-    if (this.onConstruction) {
+    if (this.onConstruction && !noOnConstruction) {
       this.onConstruction();
     }
     if (this.width) {
