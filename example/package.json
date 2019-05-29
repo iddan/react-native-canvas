@@ -2,15 +2,14 @@
   "name": "example",
   "version": "0.1.0",
   "private": true,
-  "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
   "scripts": {
     "start": "react-native start",
     "android": "react-native run-android",
     "ios": "react-native run-ios"
   },
   "dependencies": {
-    "react": "^16.8.3",
-    "react-native": "^0.58.5",
+    "react": "^16.8.6",
+    "react-native": "^0.59.8",
     "react-native-canvas": "^0.1.28"
   }
 }

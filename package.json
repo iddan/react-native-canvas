@@ -1,7 +1,7 @@
 {
   "name": "react-native-canvas",
   "license": "MIT",
-  "version": "0.1.31",
+  "version": "0.1.33",
   "main": "dist/Canvas",
   "scripts": {
     "build": "babel src --out-dir dist --copy-files --compact false && node bundle-html.js ./dist/index.html",
@@ -20,8 +20,10 @@
     "prettier": "^1.14.2"
   },
   "dependencies": {
-    "ctx-polyfill": "^1.1.4",
-    "react-native-webview": "^5.4.0"
+    "ctx-polyfill": "^1.1.4"
   },
-  "repository": "https://github.com/iddan/react-native-canvas"
+  "repository": "https://github.com/iddan/react-native-canvas",
+  "peerDependencies": {
+    "react-native-webview": ">=5.10.0 || >=6.1.0"
+  }
 }

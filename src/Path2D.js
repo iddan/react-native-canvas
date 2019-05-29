@@ -17,10 +17,10 @@ import {webviewConstructor, webviewMethods} from './webview-binders';
 ])
 @webviewConstructor('Path2D')
 export default class Path2D {
-  constructor(canvas, ...args) {
+  constructor(canvas, pathOrD, noOnConstruction) {
     this.canvas = canvas;
-    if (this.onConstruction) {
-      this.onConstruction(...args);
+    if (this.onConstruction && !noOnConstruction) {
+      this.onConstruction(pathOrD);
     }
   }
 

@@ -29,17 +29,16 @@ const SPECIAL_CONSTRUCTOR = {
 };
 
 export const webviewConstructor = constructorName => target => {
-  const {onConstruction} = target.prototype;
   constructors[constructorName] = target;
+  target.constructLocally = function(...args) {
+    // Pass noOnConstruction
+    return new target(...args, true);
+  };
   /**
    * Arguments should be identical to the arguments passed to the constructor
    * just without the canvas instance
    */
   target.prototype.onConstruction = function(...args) {
-    if (onConstruction) {
-      onConstruction.call(this);
-    }
-
     if (SPECIAL_CONSTRUCTOR[constructorName] !== undefined) {
       const {className, paramNum} = SPECIAL_CONSTRUCTOR[constructorName];
       args[paramNum] = {className, classArgs: [args[paramNum]]};

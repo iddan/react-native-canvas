@@ -43,7 +43,11 @@ export default class Canvas extends Component {
   /**
    * in the mounting process this.webview can be set to null
    */
-  webviewPostMessage = message => this.webview && this.webview.postMessage(JSON.stringify(message));
+  webviewPostMessage = message => {
+    if (this.webview) {
+      this.webview.postMessage(JSON.stringify(message));
+    }
+  };
 
   bus = new Bus(this.webviewPostMessage);
   listeners = [];
@@ -100,9 +104,11 @@ export default class Canvas extends Component {
           const constructor = constructors[data.meta.constructor];
           if (constructor) {
             const {args, payload} = data;
+            const object = constructor.constructLocally(this, ...args);
+            Object.assign(object, payload, {[WEBVIEW_TARGET]: data.meta.target});
             data = {
               ...data,
-              payload: Object.assign(new constructor(this, ...args), payload, {[WEBVIEW_TARGET]: data.meta.target}),
+              payload: object,
             };
           }
           for (const listener of this.listeners) {

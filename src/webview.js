@@ -165,10 +165,10 @@ const toArgs = result => Object
 const createObjectsFromArgs = args => {
   for (let index = 0; index < args.length; index += 1) {
     const currentArg = args[index];
-    if (currentArg.className !== undefined) {
+    if (currentArg && currentArg.className !== undefined) {
       const {className, classArgs} = currentArg;
-      const constructor = new constructors[className](...classArgs);
-      args[index] = constructor;
+      const object = new constructors[className](...classArgs);
+      args[index] = object;
     }
   }
   return args;
@@ -268,7 +268,12 @@ function handleMessage({id, type, payload}) {
     case 'construct': {
       const {constructor, id: target, args = []} = payload;
       const newArgs = createObjectsFromArgs(args);
-      const object = new constructors[constructor](...newArgs);
+      let object;
+      try {
+        object = new constructors[constructor](...newArgs);
+      } catch (error) {
+        throw new Error(`Error while constructing ${constructor} ${error.message}`);
+      }
       object.__constructorName__ = constructor;
       const message = toMessage({});
       targets[target] = object;
@@ -301,6 +306,7 @@ const handleError = (err, message) => {
       type: 'error',
       payload: {
         message: err.message,
+        stack: err.stack,
       },
     }),
   );
