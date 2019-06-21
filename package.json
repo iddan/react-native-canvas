@@ -14,7 +14,7 @@
     "@babel/core": "7.0.0-beta.47",
     "@babel/plugin-proposal-decorators": "7.0.0-beta.47",
     "babel-preset-react-native": "^5.0.2",
-    "eslint": "^3",
+    "eslint": "^4",
     "eslint-config-fbjs-opensource": "^1.0.0",
     "parse5": "^5.0.0",
     "prettier": "^1.14.2"
