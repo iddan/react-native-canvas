@@ -7,7 +7,7 @@ A Canvas component for React Native
 
 ```bash
 npm install react-native-webview
-react-native-link react-native-webview
+react-native link react-native-webview
 npm install react-native-canvas
 ```
 
