@@ -150,7 +150,7 @@ export default class Canvas extends Component {
       );
     }
     return (
-      <View style={[stylesheet.container, {width, height}, style]}>
+      <View style={[stylesheet.container, {width, height, opacity: this.loaded ? 1 : 0}, style]}>
         <WebView
           ref={this.handleRef}
           style={[stylesheet.webview, {height, width}]}
