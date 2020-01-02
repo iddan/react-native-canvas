@@ -26,6 +26,7 @@ const stylesheet = StyleSheet.create({
 export default class Canvas extends Component {
   static propTypes = {
     style: ViewPropTypes.style,
+    webviewStyle: ViewPropTypes.style,
     baseUrl: PropTypes.string,
     originWhitelist: PropTypes.arrayOf(PropTypes.string),
   };
@@ -128,13 +129,13 @@ export default class Canvas extends Component {
 
   render() {
     const {width, height} = this;
-    const {style, baseUrl = '', originWhitelist = ['*']} = this.props;
+    const {style, baseUrl = '', originWhitelist = ['*'], webviewStyle} = this.props;
     if (Platform.OS === 'android') {
       return (
         <View style={[stylesheet.container, {width, height}, style]}>
           <WebView
             ref={this.handleRef}
-            style={[stylesheet.webview, {height, width}]}
+            style={[stylesheet.webview, {height, width}, webviewStyle]}
             source={{html, baseUrl}}
             originWhitelist={originWhitelist}
             onMessage={this.handleMessage}
@@ -153,7 +154,7 @@ export default class Canvas extends Component {
       <View style={[stylesheet.container, {width, height, opacity: this.loaded ? 1 : 0}, style]}>
         <WebView
           ref={this.handleRef}
-          style={[stylesheet.webview, {height, width}]}
+          style={[stylesheet.webview, {height, width}, webviewStyle]}
           source={{html, baseUrl}}
           originWhitelist={originWhitelist}
           onMessage={this.handleMessage}
