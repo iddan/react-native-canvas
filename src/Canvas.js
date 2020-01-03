@@ -18,6 +18,12 @@ const stylesheet = StyleSheet.create({
     backgroundColor: 'transparent',
     flex: 0,
   },
+  webviewAndroid9: {
+    overflow: 'hidden',
+    backgroundColor: 'transparent',
+    flex: 0,
+    opacity: 0.99,
+  },
 });
 
 @webviewTarget('canvas')
@@ -130,11 +136,12 @@ export default class Canvas extends Component {
     const {width, height} = this;
     const {style, baseUrl = '', originWhitelist = ['*']} = this.props;
     if (Platform.OS === 'android') {
+      const isAndroid9 = Platform.Version >= 28;
       return (
         <View style={[stylesheet.container, {width, height}, style]}>
           <WebView
             ref={this.handleRef}
-            style={[stylesheet.webview, {height, width}]}
+            style={[isAndroid9 ? stylesheet.webviewAndroid9 : stylesheet.webview, {height, width}]}
             source={{html, baseUrl}}
             originWhitelist={originWhitelist}
             onMessage={this.handleMessage}
