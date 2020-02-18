@@ -30,6 +30,11 @@ const stylesheet = StyleSheet.create({
 @webviewProperties({width: 300, height: 150})
 @webviewMethods(['toDataURL'])
 export default class Canvas extends Component {
+
+  state = {
+    isLoaded: false,
+  }
+
   static propTypes = {
     style: ViewPropTypes.style,
     baseUrl: PropTypes.string,
@@ -45,7 +50,6 @@ export default class Canvas extends Component {
     this.listeners.splice(this.listeners.indexOf(listener), 1);
   };
 
-  loaded = false;
   /**
    * in the mounting process this.webview can be set to null
    */
@@ -128,13 +132,14 @@ export default class Canvas extends Component {
   };
 
   handleLoad = () => {
-    this.loaded = true;
+    this.setState({isLoaded: true});
     this.bus.resume();
   };
 
   render() {
     const {width, height} = this;
     const {style, baseUrl = '', originWhitelist = ['*']} = this.props;
+    const {isLoaded} = this.state;
     if (Platform.OS === 'android') {
       const isAndroid9 = Platform.Version >= 28;
       return (
@@ -157,7 +162,7 @@ export default class Canvas extends Component {
       );
     }
     return (
-      <View style={[stylesheet.container, {width, height, opacity: this.loaded ? 1 : 0}, style]}>
+      <View style={[stylesheet.container, {width, height, opacity: isLoaded ? 1 : 0}, style]}>
         <WebView
           ref={this.handleRef}
           style={[stylesheet.webview, {height, width}]}
