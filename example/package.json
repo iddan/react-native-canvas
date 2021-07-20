@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "react": "^16.8.6",
-    "react-native": "^0.59.8",
+    "react-native": "^0.62.3",
     "react-native-canvas": "^0.1.28"
   }
 }
