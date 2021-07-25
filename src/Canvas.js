@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import {View, Platform, ViewPropTypes, StyleSheet} from 'react-native';
+import {View, Platform, StyleSheet} from 'react-native';
 import {WebView} from 'react-native-webview';
 import Bus from './Bus';
 import {webviewTarget, webviewProperties, webviewMethods, constructors, WEBVIEW_TARGET} from './webview-binders';
@@ -34,12 +33,6 @@ export default class Canvas extends Component {
   state = {
     isLoaded: false,
   }
-
-  static propTypes = {
-    style: ViewPropTypes.style,
-    baseUrl: PropTypes.string,
-    originWhitelist: PropTypes.arrayOf(PropTypes.string),
-  };
 
   addMessageListener = listener => {
     this.listeners.push(listener);
