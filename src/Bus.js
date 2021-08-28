@@ -25,7 +25,16 @@ export default class Bus {
    */
   post(message) {
     return new Promise(resolve => {
-      this._messageListeners[message.id] = resolve;
+
+      /**
+       * Currently, 'set' is the only message type that's not resolved
+       * back to the caller. If we store it here, it will leak memory
+       * because the entry won't get removed from this._messageListeners.
+       */
+      if (message.type !== 'set') {
+        this._messageListeners[message.id] = resolve;
+      }
+
       if (!this._paused) {
         this._send(message);
       } else {
@@ -39,6 +48,11 @@ export default class Bus {
    */
   handle(message) {
     const handler = this._messageListeners[message.id];
+
+    // Delete the message listener from the cache as soon as it's handled.
+    delete this._messageListeners[message.id];
+
+
     if (handler) {
       handler(message);
     }
