@@ -68,3 +68,11 @@ WebView Image constructor. Unlike in the browsers accepts canvas as first argume
 ```javascript
 const image = new Image(canvas, height, width);
 ```
+
+#### Path2D
+
+Path2D API constructor. Unlike in the browsers, this requires the canvas as first argument. See also https://developer.mozilla.org/en-US/docs/Web/API/Path2D/Path2D.
+
+```javascript
+const path = new Path2D(canvas);
+```
