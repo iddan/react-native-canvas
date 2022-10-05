@@ -2,7 +2,7 @@
   "name": "react-native-canvas",
   "license": "MIT",
   "version": "0.1.38",
-  "main": "dist/Canvas",
+  "main": "dist/Exports",
   "scripts": {
     "build": "babel src --out-dir dist --copy-files --compact false && node bundle-html.js ./dist/index.html",
     "copy-to-example": "rsync -rv dist example/node_modules/react-native-canvas",
