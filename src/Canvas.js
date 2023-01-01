@@ -144,6 +144,7 @@ export default class Canvas extends Component {
             originWhitelist={originWhitelist}
             onMessage={this.handleMessage}
             onLoad={this.handleLoad}
+            overScrollMode="never"
             mixedContentMode="always"
             scalesPageToFit={false}
             javaScriptEnabled
