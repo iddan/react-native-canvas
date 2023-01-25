@@ -5,9 +5,6 @@ import Bus from './Bus';
 import {webviewTarget, webviewProperties, webviewMethods, constructors, WEBVIEW_TARGET} from './webview-binders';
 import CanvasRenderingContext2D from './CanvasRenderingContext2D';
 import html from './index.html.js';
-export {default as Image} from './Image';
-export {default as ImageData} from './ImageData';
-export {default as Path2D} from './Path2D';
 import './CanvasGradient';
 
 const stylesheet = StyleSheet.create({
