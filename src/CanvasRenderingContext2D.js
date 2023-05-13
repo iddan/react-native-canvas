@@ -35,6 +35,7 @@ import {webviewTarget, webviewProperties, webviewMethods} from './webview-binder
   'drawImage',
   'drawWidgetAsOnScreen',
   'drawWindow',
+  'ellipse',
   'fill',
   'fillRect',
   'fillText',
