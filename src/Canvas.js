@@ -57,6 +57,8 @@ export default class Canvas extends Component {
   context2D = new CanvasRenderingContext2D(this);
 
   constructor() {
+    if(Platform.OS == "web")
+      throw new Error("This package uses react-native-webview which is not supported by web projects, refer to the actual <canvas> element.");
     super();
     this.bus.pause();
   }
