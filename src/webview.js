@@ -33,6 +33,9 @@ const flattenObject = object => {
 class AutoScaledCanvas {
   constructor(element) {
     this.element = element;
+
+    this.FontFace = window.FontFace;
+    this.fontFaceSet = document.fonts;
   }
 
   toDataURL(...args) {
@@ -67,6 +70,27 @@ class AutoScaledCanvas {
     this.savedHeight = value;
     this.autoScale();
     return value;
+  }
+
+  initFonts(fonts = []) {
+    return Promise
+      .all(fonts.map(font => this.addFont(font)));
+  }
+
+  addFont(font) {
+    const {
+      name,
+      link,
+      options: {
+        style = 'normal',
+        weight = 500,
+      } = {},
+    } = font;
+    return new Promise(resolve => {
+      const fontFace = this.FontFace(name, `url(${link})`, {style, weight});
+      this.fontFaceSet.onloadingdone = resolve;
+      this.fontFaceSet.add(fontFace);
+    });
   }
 }
 
@@ -112,18 +136,16 @@ const toMessage = result => {
  * `webview-binders.js`.
  *
  */
-const toArgs = result => {
-  const args = [];
-  for (const key in result) {
-    if (result[key] !== undefined && key !== '@@WEBVIEW_TARGET') {
-      if (typedArrays[result[key].constructor.name] !== undefined) {
-        result[key] = Array.from(result[key]);
-      }
-      args.push(result[key]);
+const toArgs = result => Object
+  .entries(result)
+  .filter(([key, value]) => !(value === undefined || key === '@@WEBVIEW_TARGET'))
+  .map(([, value]) => {
+    if (typedArrays[value.constructor.name] !== undefined) {
+      return Array.from(value);
     }
-  }
-  return args;
-};
+
+    return value;
+  });
 
 /**
  * Creates objects from args. If any argument have the object

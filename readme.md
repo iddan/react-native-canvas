@@ -53,6 +53,46 @@ Returns a canvas rendering context. Currently only supports 2d context.
 
 Returns a `Promise` that resolves to DataURL.
 
+### Canvas#addFont(font)
+
+`font` is an object that described bellow
+```JS
+const font = {
+  name: 'Miss Fajardose', // required
+  link: 'https://fonts.gstatic.com/s/missfajardose/v8/E21-_dn5gvrawDdPFVl-N0Ajb_qoUverqJnp.woff2', // required
+  options: { // optional
+    style: 'normal',
+    weight: 500,
+  }
+};
+
+canvas
+  .addFont(font)
+  .then(() => {
+    console.log('Font has been added');
+  });
+
+
+```
+Returns a `Promise` after loading font
+
+
+#### Canvas#initFonts(fonts)
+
+`fonts` are an array of objects that described above
+```JS
+const fonts = [font1, font2, ...];
+
+canvas
+  .initFonts(fonts)
+  .then(() => {
+    console.log('Fonts h');
+  });
+
+```
+Returns a `Promise` after loading all fonts
+
+
 #### CanvasRenderingContext2D
 
 Standard CanvasRenderingContext2D. [MDN](https://developer.mozilla.org/en/docs/Web/API/CanvasRenderingContext2D). Only difference is `await` should be used to retrieve values from methods.

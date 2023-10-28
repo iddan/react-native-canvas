@@ -1,6 +1,7 @@
+.DS_Store
 dist/
 node_modules/
-example/
-.vscode/
+.vscode
 .history/
 .expo/
+.idea

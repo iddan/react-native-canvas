@@ -129,6 +129,31 @@ export default class App extends Component {
       context.drawImage(image, 0, 0, 100, 100);
     });
   }
+/**
+ * For example used google font
+ */
+  handleCustomFont(canvas) {
+    const image = new CanvasImage(canvas);
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = 100;
+    canvas.height = 100;
+
+    ctx.save();
+    ctx.strokeStyle = 'black';
+    ctx.strokeRect(0, 0, canvas.width, canvas.height);
+    ctx.restore();
+    
+    canvas
+      .addFont({
+        name: 'Miss Fajardose',
+        link: 'https://fonts.gstatic.com/l/font?kit=_Xmz-GY4rjmCbQfc-aPRaa4pqV340p7EZl5bwkcU4V55dc7XaVkOCo1Q-D-x1hYOZdAwD85gO8PnV3aw17Bcb_EJ-4NA_8H607rOs33MkhY8f7wbUWAdDQ2n1QB3eW3jcHe0AN51VVnuPiTMOVWKPaSDGFmHIHXVFubF6rRfNxY45LnE1RQ5DyQMd9Ji48bXLyygkZ3MoMVyaLdVNg8nVZJ-nR_Yf3UVbtEIyw&skey=f0bf0703ab573473&v=v7',
+      })
+      .then((res) => {
+        ctx.font = 'bold 20px Miss Fajardose';
+        ctx.fillText('Hello Font', 5, 52);
+      });
+  }
 
   render() {
     return (
@@ -155,6 +180,9 @@ export default class App extends Component {
           </Example>
           <Example sample={require('./images/embed-html.png')}>
             <Canvas ref={this.handleEmbedHTML} />
+          </Example>
+          <Example sample={require('./images/custom-font.png')}>
+            <Canvas ref={this.handleCustomFont} />
           </Example>
         </ScrollView>
       </View>
