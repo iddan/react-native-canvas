@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, ScrollView, StatusBar, Text, View, StyleSheet} from 'react-native';
+import {Image, ScrollView, StatusBar, View, StyleSheet} from 'react-native';
 
 import Canvas, {Image as CanvasImage, Path2D, ImageData} from 'react-native-canvas';
 
@@ -190,28 +190,29 @@ export default class App extends Component {
   }
 }
 
-const full = {
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  width: '100%',
-  height: '100%',
-};
-
-const cell = {
-  flex: 1,
-  padding: 10,
-  justifyContent: 'center',
-  alignItems: 'center',
-};
+const commonStyles = StyleSheet.create({
+  full: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
+  cell: {
+    flex: 1,
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    ...full,
+    ...commonStyles.full,
   },
   examples: {
-    ...full,
+    ...commonStyles.full,
     padding: 5,
     paddingBottom: 0,
   },
@@ -221,9 +222,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   exampleLeft: {
-    ...cell,
+    ...commonStyles.cell,
   },
   exampleRight: {
-    ...cell,
+    ...commonStyles.cell,
   },
 });

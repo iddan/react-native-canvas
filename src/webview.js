@@ -239,6 +239,17 @@ const populateRefs = arg => {
 
 document.body.appendChild(canvas);
 
+/**
+ * NOTE: Depending on the message type, the message sender will potentially get a callback via
+ * window.ReactNativeWebView.postMessage(...).  The postMessage function causes Bus to resolve
+ * a Promise to the caller.
+ *
+ * For example, ctx.fillRect(...) returns a Promise that is then resolved from the code below.
+ *
+ * 'set' is currently the exception - it doesn't resolve at all.
+ * Therefore, Bus should not be saving message ids for 'set' messages.
+ * See the function 'post' in Bus.js.
+ */
 function handleMessage({id, type, payload}) {
   switch (type) {
     case 'exec': {
