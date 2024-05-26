@@ -1,6 +1,6 @@
 dist/
 node_modules/
-example/
 .vscode/
 .history/
 .expo/
+.DS_Store

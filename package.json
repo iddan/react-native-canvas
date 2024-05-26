@@ -4,20 +4,17 @@
   "version": "0.1.39",
   "main": "dist/Canvas",
   "scripts": {
-    "build": "babel src --out-dir dist --copy-files --compact false && node bundle-html.js ./dist/index.html",
+    "build": "node bundle-html.js ./src/index.html && tsc",
     "copy-to-example": "rsync -rv dist example/node_modules/react-native-canvas",
     "build-to-example": "npm run build; npm run copy-to-example;",
     "prepare": "npm run build"
   },
   "devDependencies": {
-    "@babel/cli": "7.0.0-beta.47",
-    "@babel/core": "7.0.0-beta.47",
-    "@babel/plugin-proposal-decorators": "7.0.0-beta.47",
-    "babel-preset-react-native": "^5.0.2",
     "eslint": "^4",
     "eslint-config-fbjs-opensource": "^1.0.0",
     "parse5": "^5.0.0",
-    "prettier": "^1.14.2"
+    "prettier": "^1.14.2",
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "ctx-polyfill": "^1.1.4"

@@ -1,4 +1,4 @@
-const scale = ratio => item => {
+const scale = (ratio: number) => (item: unknown): unknown => {
   if (typeof item === 'number') {
     return item * ratio;
   }
@@ -10,17 +10,19 @@ const scale = ratio => item => {
  * @param {Canvas} canvas 
  * @return {Canvas}
  */
-window.autoScaleCanvas = function autoScaleCanvas(canvas) {
+function autoScaleCanvas(canvas: HTMLCanvasElement): HTMLCanvasElement {
   const ctx = canvas.getContext('2d');
   const ratio = window.devicePixelRatio || 1;
-  if (ratio != 1) {
+  if (ratio !== 1) {
     canvas.style.width = canvas.width + 'px';
     canvas.style.height = canvas.height + 'px';
     canvas.width *= ratio;
     canvas.height *= ratio;
     ctx.scale(ratio, ratio);
-    ctx.isPointInPath = (...args) =>
+    ctx.isPointInPath = (...args: unknown[]) =>
       CanvasRenderingContext2D.prototype.isPointInPath.apply(ctx, args.map(scale(ratio)));
   }
   return canvas;
 };
+
+window.autoScaleCanvas = autoScaleCanvas

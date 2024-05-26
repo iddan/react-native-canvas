@@ -1,19 +1,11 @@
-import React, {Component} from 'react';
-import {Image, ScrollView, StatusBar, View, StyleSheet} from 'react-native';
 
+import React, { ReactElement, useCallback } from 'react';
+import {Text, Image, ScrollView, StatusBar, View, StyleSheet, ImageSourcePropType} from 'react-native';
 import Canvas, {Image as CanvasImage, Path2D, ImageData} from 'react-native-canvas';
 
-const Example = ({sample, children}) => (
-  <View style={styles.example}>
-    <View style={styles.exampleLeft}>{children}</View>
-    <View style={styles.exampleRight}>
-      <Image source={sample} style={{width: 100, height: 100}} />
-    </View>
-  </View>
-);
-
-export default class App extends Component {
-  handleImageData(canvas) {
+export default function HomeScreen() {
+  const handleImageData = useCallback((canvas: Canvas | null) => {
+    if (!canvas) return;
     canvas.width = 100;
     canvas.height = 100;
 
@@ -32,9 +24,10 @@ export default class App extends Component {
       const imgData = new ImageData(canvas, data, 100, 100);
       context.putImageData(imgData, 0, 0);
     });
-  }
+  }, [])
 
-  async handlePurpleRect(canvas) {
+  const handlePurpleRect = useCallback(async (canvas: Canvas | null) => {
+    if (!canvas) return;
     canvas.width = 100;
     canvas.height = 100;
 
@@ -44,9 +37,10 @@ export default class App extends Component {
     context.fillRect(0, 0, 100, 100);
 
     const {width} = await context.measureText('yo');
-  }
+  }, [])
 
-  handleRedCircle(canvas) {
+  const handleRedCircle = useCallback((canvas: Canvas | null) => {
+    if (!canvas) return;
     canvas.width = 100;
     canvas.height = 100;
 
@@ -55,9 +49,10 @@ export default class App extends Component {
     context.fillStyle = 'red';
     context.arc(50, 50, 49, 0, Math.PI * 2, true);
     context.fill();
-  }
+  }, [])
 
-  handleImageRect(canvas) {
+  const handleImageRect = useCallback((canvas: Canvas | null) => {
+    if (!canvas) return;
     const image = new CanvasImage(canvas);
     canvas.width = 100;
     canvas.height = 100;
@@ -68,9 +63,10 @@ export default class App extends Component {
     image.addEventListener('load', () => {
       context.drawImage(image, 0, 0, 100, 100);
     });
-  }
+  }, [])
 
-  handlePath(canvas) {
+  const handlePath = useCallback((canvas: Canvas | null) => {
+    if (!canvas) return;
     canvas.width = 100;
     canvas.height = 100;
     const context = canvas.getContext('2d');
@@ -91,9 +87,10 @@ export default class App extends Component {
     context.fillStyle = 'pink';
     context.fill(rectPath);
     context.restore();
-  }
+  }, [])
 
-  async handleGradient(canvas) {
+  const handleGradient = useCallback(async (canvas: Canvas | null) => {
+    if (!canvas) return;
     canvas.width = 100;
     canvas.height = 100;
     const ctx = canvas.getContext('2d');
@@ -102,9 +99,10 @@ export default class App extends Component {
     gradient.addColorStop(1, 'white');
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, 100, 100);
-  }
+  }, [])
 
-  handleEmbedHTML(canvas) {
+  const handleEmbedHTML = useCallback((canvas: Canvas | null) => {
+    if (!canvas) return;
     const image = new CanvasImage(canvas);
     canvas.width = 100;
     canvas.height = 100;
@@ -128,39 +126,55 @@ export default class App extends Component {
     image.addEventListener('load', () => {
       context.drawImage(image, 0, 0, 100, 100);
     });
-  }
+  }, [])
 
-  render() {
-    return (
-      <View style={styles.container}>
+
+  return (
+    <View style={styles.container}>
         <StatusBar hidden={true} />
         <ScrollView style={styles.examples}>
-          <Example sample={require('./images/purple-black-rect.png')}>
-            <Canvas ref={this.handleImageData} />
+          <View style={styles.example}>
+            <View style={styles.exampleLeft}>
+              <Text>Result</Text>
+            </View>
+            <View style={styles.exampleRight}>
+              <Text>Expected</Text>
+            </View>
+          </View>
+          <Example sample={require('../assets/images/purple-black-rect.png')}>
+            <Canvas ref={handleImageData} />
           </Example>
-          <Example sample={require('./images/purple-rect.png')}>
-            <Canvas ref={this.handlePurpleRect} />
+          <Example sample={require('../assets/images/purple-rect.png')}>
+            <Canvas ref={handlePurpleRect} />
           </Example>
-          <Example sample={require('./images/red-circle.png')}>
-            <Canvas ref={this.handleRedCircle} />
+          <Example sample={require('../assets/images/red-circle.png')}>
+            <Canvas ref={handleRedCircle} />
           </Example>
-          <Example sample={require('./images/image-rect.png')}>
-            <Canvas ref={this.handleImageRect} />
+          <Example sample={require('../assets/images/image-rect.png')}>
+            <Canvas ref={handleImageRect} />
           </Example>
-          <Example sample={require('./images/path.png')}>
-            <Canvas ref={this.handlePath} />
+          <Example sample={require('../assets/images/path.png')}>
+            <Canvas ref={handlePath} />
           </Example>
-          <Example sample={require('./images/gradient.png')}>
-            <Canvas ref={this.handleGradient} />
+          <Example sample={require('../assets/images/gradient.png')}>
+            <Canvas ref={handleGradient} />
           </Example>
-          <Example sample={require('./images/embed-html.png')}>
-            <Canvas ref={this.handleEmbedHTML} />
+          <Example sample={require('../assets/images/embed-html.png')}>
+            <Canvas ref={handleEmbedHTML} />
           </Example>
         </ScrollView>
       </View>
-    );
-  }
+  );
 }
+
+const Example = ({sample, children}: {sample: ImageSourcePropType, children: ReactElement}) => (
+  <View style={styles.example}>
+    <View style={styles.exampleLeft}>{children}</View>
+    <View style={styles.exampleRight}>
+      <Image source={sample} style={{width: 100, height: 100}} />
+    </View>
+  </View>
+);
 
 const commonStyles = StyleSheet.create({
   full: {
