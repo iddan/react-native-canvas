@@ -1,7 +1,7 @@
 {
   "name": "react-native-canvas",
   "license": "MIT",
-  "version": "0.1.39",
+  "version": "0.1.40",
   "main": "dist/Canvas",
   "scripts": {
     "build": "node bundle-html.js ./src/index.html && tsc",
