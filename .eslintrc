@@ -1,3 +1,8 @@
 {
-  "extends": ["fbjs-opensource"]
+  "extends": ["fbjs-opensource"],
+  "rules": {
+    "quotes": "off",
+    "arrow-parens": "off",
+    "object-curly-spacing": "off"
+  }
 }

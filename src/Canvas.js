@@ -1,52 +1,57 @@
-import React, {Component} from 'react';
-import {View, Platform, StyleSheet} from 'react-native';
-import {WebView} from 'react-native-webview';
-import Bus from './Bus';
-import {webviewTarget, webviewProperties, webviewMethods, constructors, WEBVIEW_TARGET} from './webview-binders';
-import CanvasRenderingContext2D from './CanvasRenderingContext2D';
-import html from './index.html.js';
-export {default as Image} from './Image';
-export {default as ImageData} from './ImageData';
-export {default as Path2D} from './Path2D';
-import './CanvasGradient';
+import React, { Component } from "react";
+import { View, Platform, StyleSheet } from "react-native";
+import { WebView } from "react-native-webview";
+import Bus from "./Bus";
+import {
+  webviewTarget,
+  webviewProperties,
+  webviewMethods,
+  constructors,
+  WEBVIEW_TARGET,
+} from "./webview-binders";
+import CanvasRenderingContext2D from "./CanvasRenderingContext2D";
+import html from "./index.html.js";
+export { default as Image } from "./Image";
+export { default as ImageData } from "./ImageData";
+export { default as Path2D } from "./Path2D";
+import "./CanvasGradient";
 
 const stylesheet = StyleSheet.create({
-  container: {overflow: 'hidden', flex: 0},
+  container: { overflow: "hidden", flex: 0 },
   webview: {
-    overflow: 'hidden',
-    backgroundColor: 'transparent',
+    overflow: "hidden",
+    backgroundColor: "transparent",
     flex: 0,
   },
   webviewAndroid9: {
-    overflow: 'hidden',
-    backgroundColor: 'transparent',
+    overflow: "hidden",
+    backgroundColor: "transparent",
     flex: 0,
     opacity: 0.99,
   },
 });
 
-@webviewTarget('canvas')
-@webviewProperties({width: 300, height: 150})
-@webviewMethods(['toDataURL'])
+@webviewTarget("canvas")
+@webviewProperties({ width: 300, height: 150 })
+@webviewMethods(["toDataURL"])
 export default class Canvas extends Component {
-
   state = {
     isLoaded: false,
-  }
+  };
 
-  addMessageListener = listener => {
+  addMessageListener = (listener) => {
     this.listeners.push(listener);
     return () => this.removeMessageListener(listener);
   };
 
-  removeMessageListener = listener => {
+  removeMessageListener = (listener) => {
     this.listeners.splice(this.listeners.indexOf(listener), 1);
   };
 
   /**
    * in the mounting process this.webview can be set to null
    */
-  webviewPostMessage = message => {
+  webviewPostMessage = (message) => {
     if (this.webview) {
       this.webview.postMessage(JSON.stringify(message));
     }
@@ -63,49 +68,54 @@ export default class Canvas extends Component {
 
   getContext = (contextType, contextAttributes) => {
     switch (contextType) {
-      case '2d': {
+      case "2d": {
         return this.context2D;
       }
     }
     return null;
   };
 
-  postMessage = async message => {
-    const {stack} = new Error();
-    const {type, payload} = await this.bus.post({id: Math.random(), ...message});
+  postMessage = async (message) => {
+    const { stack } = new Error();
+    const { type, payload } = await this.bus.post({
+      id: Math.random(),
+      ...message,
+    });
     switch (type) {
-      case 'error': {
+      case "error": {
         const error = new Error(payload.message);
         error.stack = stack;
         throw error;
       }
-      case 'json': {
+      case "json": {
         return payload;
       }
-      case 'blob': {
+      case "blob": {
         return atob(payload);
       }
     }
   };
 
-  handleMessage = e => {
+  handleMessage = (e) => {
     let data = JSON.parse(e.nativeEvent.data);
     switch (data.type) {
-      case 'log': {
+      case "log": {
         // eslint-disable-line no-console
         console.log(...data.payload);
         break;
       }
-      case 'error': {
+      case "error": {
         throw new Error(data.payload.message);
       }
       default: {
         if (data.payload) {
           const constructor = constructors[data.meta.constructor];
           if (constructor) {
-            const {args, payload} = data;
+            const { args, payload } = data;
             const object = constructor.constructLocally(this, ...args);
-            Object.assign(object, payload, {[WEBVIEW_TARGET]: data.meta.target});
+            Object.assign(object, payload, {
+              [WEBVIEW_TARGET]: data.meta.target,
+            });
             data = {
               ...data,
               payload: object,
@@ -120,27 +130,30 @@ export default class Canvas extends Component {
     }
   };
 
-  handleRef = element => {
+  handleRef = (element) => {
     this.webview = element;
   };
 
   handleLoad = () => {
-    this.setState({isLoaded: true});
+    this.setState({ isLoaded: true });
     this.bus.resume();
   };
 
   render() {
-    const {width, height} = this;
-    const {style, baseUrl = '', originWhitelist = ['*']} = this.props;
-    const {isLoaded} = this.state;
-    if (Platform.OS === 'android') {
+    const { width, height } = this;
+    const { style, baseUrl = "", originWhitelist = ["*"] } = this.props;
+    const { isLoaded } = this.state;
+    if (Platform.OS === "android") {
       const isAndroid9 = Platform.Version >= 28;
       return (
-        <View style={[stylesheet.container, {width, height}, style]}>
+        <View style={[stylesheet.container, { width, height }, style]}>
           <WebView
             ref={this.handleRef}
-            style={[isAndroid9 ? stylesheet.webviewAndroid9 : stylesheet.webview, {height, width}]}
-            source={{html, baseUrl}}
+            style={[
+              isAndroid9 ? stylesheet.webviewAndroid9 : stylesheet.webview,
+              { height, width },
+            ]}
+            source={{ html, baseUrl }}
             originWhitelist={originWhitelist}
             onMessage={this.handleMessage}
             onLoad={this.handleLoad}
@@ -156,11 +169,17 @@ export default class Canvas extends Component {
       );
     }
     return (
-      <View style={[stylesheet.container, {width, height, opacity: isLoaded ? 1 : 0}, style]}>
+      <View
+        style={[
+          stylesheet.container,
+          { width, height, opacity: isLoaded ? 1 : 0 },
+          style,
+        ]}
+      >
         <WebView
           ref={this.handleRef}
-          style={[stylesheet.webview, {height, width}]}
-          source={{html, baseUrl}}
+          style={[stylesheet.webview, { height, width }]}
+          source={{ html, baseUrl }}
           originWhitelist={originWhitelist}
           onMessage={this.handleMessage}
           onLoad={this.handleLoad}

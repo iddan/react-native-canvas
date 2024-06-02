@@ -1,23 +1,20 @@
-const WEBVIEW_TARGET = '@@WEBVIEW_TARGET';
+const WEBVIEW_TARGET = "@@WEBVIEW_TARGET";
 
-const ID = () =>
-  Math.random()
-    .toString(32)
-    .slice(2);
+const ID = () => Math.random().toString(32).slice(2);
 
 const flattenObjectCopyValue = (flatObj, srcObj, key) => {
   const value = srcObj[key];
-  if (typeof value === 'function') {
+  if (typeof value === "function") {
     return;
   }
-  if (typeof value === 'object' && value instanceof Node) {
+  if (typeof value === "object" && value instanceof Node) {
     return;
   }
   flatObj[key] = flattenObject(value);
 };
 
-const flattenObject = object => {
-  if (typeof object !== 'object' || object === null) {
+const flattenObject = (object) => {
+  if (typeof object !== "object" || object === null) {
     return object;
   }
   const flatObject = {};
@@ -70,10 +67,10 @@ class AutoScaledCanvas {
   }
 }
 
-const toMessage = result => {
+const toMessage = (result) => {
   if (result instanceof Blob) {
     return {
-      type: 'blob',
+      type: "blob",
       payload: btoa(result),
       meta: {},
     };
@@ -85,7 +82,7 @@ const toMessage = result => {
       targets[id] = result;
     }
     return {
-      type: 'json',
+      type: "json",
       payload: flattenObject(result),
       args: toArgs(flattenObject(result)),
       meta: {
@@ -95,7 +92,7 @@ const toMessage = result => {
     };
   }
   return {
-    type: 'json',
+    type: "json",
     payload: JSON.stringify(result),
     meta: {},
   };
@@ -112,10 +109,10 @@ const toMessage = result => {
  * `webview-binders.js`.
  *
  */
-const toArgs = result => {
+const toArgs = (result) => {
   const args = [];
   for (const key in result) {
-    if (result[key] !== undefined && key !== '@@WEBVIEW_TARGET') {
+    if (result[key] !== undefined && key !== "@@WEBVIEW_TARGET") {
       if (typedArrays[result[key].constructor.name] !== undefined) {
         result[key] = Array.from(result[key]);
       }
@@ -140,11 +137,11 @@ const toArgs = result => {
  * We need to convert the first parameter into an object first.
  *
  */
-const createObjectsFromArgs = args => {
+const createObjectsFromArgs = (args) => {
   for (let index = 0; index < args.length; index += 1) {
     const currentArg = args[index];
     if (currentArg && currentArg.className !== undefined) {
-      const {className, classArgs} = currentArg;
+      const { className, classArgs } = currentArg;
       const object = new constructors[className](...classArgs);
       args[index] = object;
     }
@@ -160,12 +157,12 @@ const createObjectsFromArgs = args => {
 //   window.ReactNativeWebView.postMessage(message);
 // };
 
-const canvas = document.createElement('canvas');
+const canvas = document.createElement("canvas");
 const autoScaledCanvas = new AutoScaledCanvas(canvas);
 
 const targets = {
   canvas: autoScaledCanvas,
-  context2D: canvas.getContext('2d'),
+  context2D: canvas.getContext("2d"),
 };
 
 const constructors = {
@@ -186,29 +183,29 @@ const typedArrays = {
  */
 Image.bind =
   Image.bind ||
-  function() {
+  function () {
     return Image;
   };
 
 Path2D.bind =
   Path2D.bind ||
-  function() {
+  function () {
     return Path2D;
   };
 
 ImageData.bind =
   ImageData.bind ||
-  function() {
+  function () {
     return ImageData;
   };
 
 Uint8ClampedArray.bind =
   Uint8ClampedArray.bind ||
-  function() {
+  function () {
     return Uint8ClampedArray;
   };
 
-const populateRefs = arg => {
+const populateRefs = (arg) => {
   if (arg && arg.__ref__) {
     return targets[arg.__ref__];
   }
@@ -228,10 +225,10 @@ document.body.appendChild(canvas);
  * Therefore, Bus should not be saving message ids for 'set' messages.
  * See the function 'post' in Bus.js.
  */
-function handleMessage({id, type, payload}) {
+function handleMessage({ id, type, payload }) {
   switch (type) {
-    case 'exec': {
-      const {target, method, args} = payload;
+    case "exec": {
+      const { target, method, args } = payload;
       const result = targets[target][method](...args.map(populateRefs));
       const message = toMessage(result);
 
@@ -239,48 +236,55 @@ function handleMessage({id, type, payload}) {
        * In iOS 9 some classes name are not defined so we compare to
        * known constructors to find the name.
        */
-      if (typeof result === 'object' && !message.meta.constructor) {
+      if (typeof result === "object" && !message.meta.constructor) {
         for (const constructorName in constructors) {
           if (result instanceof constructors[constructorName]) {
             message.meta.constructor = constructorName;
           }
         }
       }
-      window.ReactNativeWebView.postMessage(JSON.stringify({id, ...message}));
+      window.ReactNativeWebView.postMessage(JSON.stringify({ id, ...message }));
       break;
     }
-    case 'set': {
-      const {target, key, value} = payload;
+    case "set": {
+      const { target, key, value } = payload;
       targets[target][key] = populateRefs(value);
       break;
     }
-    case 'construct': {
-      const {constructor, id: target, args = []} = payload;
+    case "construct": {
+      const { constructor, id: target, args = [] } = payload;
       const newArgs = createObjectsFromArgs(args);
       let object;
       try {
         object = new constructors[constructor](...newArgs);
       } catch (error) {
-        throw new Error(`Error while constructing ${constructor} ${error.message}`);
+        throw new Error(
+          `Error while constructing ${constructor} ${error.message}`,
+        );
       }
       object.__constructorName__ = constructor;
       const message = toMessage({});
       targets[target] = object;
-      window.ReactNativeWebView.postMessage(JSON.stringify({id, ...message}));
+      window.ReactNativeWebView.postMessage(JSON.stringify({ id, ...message }));
       break;
     }
-    case 'listen': {
-      const {types, target} = payload;
+    case "listen": {
+      const { types, target } = payload;
       for (const eventType of types) {
-        targets[target].addEventListener(eventType, e => {
+        targets[target].addEventListener(eventType, (e) => {
           const message = toMessage({
-            type: 'event',
+            type: "event",
             payload: {
               type: e.type,
-              target: {...flattenObject(targets[target]), [WEBVIEW_TARGET]: target},
+              target: {
+                ...flattenObject(targets[target]),
+                [WEBVIEW_TARGET]: target,
+              },
             },
           });
-          window.ReactNativeWebView.postMessage(JSON.stringify({id, ...message}));
+          window.ReactNativeWebView.postMessage(
+            JSON.stringify({ id, ...message }),
+          );
         });
       }
       break;
@@ -292,14 +296,14 @@ const handleError = (err, message) => {
   window.ReactNativeWebView.postMessage(
     JSON.stringify({
       id: message.id,
-      type: 'error',
+      type: "error",
       payload: {
         message: err.message,
         stack: err.stack,
       },
     }),
   );
-  document.removeEventListener('message', handleIncomingMessage);
+  document.removeEventListener("message", handleIncomingMessage);
 };
 
 function handleIncomingMessage(e) {
@@ -322,6 +326,6 @@ function handleIncomingMessage(e) {
 }
 
 // iOS
-window.addEventListener('message', handleIncomingMessage);
+window.addEventListener("message", handleIncomingMessage);
 // Android
-document.addEventListener('message', handleIncomingMessage);
+document.addEventListener("message", handleIncomingMessage);

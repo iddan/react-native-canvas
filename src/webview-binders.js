@@ -1,18 +1,15 @@
-export const WEBVIEW_TARGET = '@@WEBVIEW_TARGET';
+export const WEBVIEW_TARGET = "@@WEBVIEW_TARGET";
 
 /**
  * @mutable
  */
 export const constructors = {};
 
-export const webviewTarget = targetName => target => {
+export const webviewTarget = (targetName) => (target) => {
   target.prototype[WEBVIEW_TARGET] = targetName;
 };
 
-const ID = () =>
-  Math.random()
-    .toString(32)
-    .slice(2);
+const ID = () => Math.random().toString(32).slice(2);
 
 /**
  * These are where objects need other objects as an argument.
@@ -23,14 +20,14 @@ const ID = () =>
  */
 const SPECIAL_CONSTRUCTOR = {
   ImageData: {
-    className: 'Uint8ClampedArray',
+    className: "Uint8ClampedArray",
     paramNum: 0,
   },
 };
 
-export const webviewConstructor = constructorName => target => {
+export const webviewConstructor = (constructorName) => (target) => {
   constructors[constructorName] = target;
-  target.constructLocally = function(...args) {
+  target.constructLocally = function (...args) {
     // Pass noOnConstruction
     return new target(...args, true);
   };
@@ -38,14 +35,14 @@ export const webviewConstructor = constructorName => target => {
    * Arguments should be identical to the arguments passed to the constructor
    * just without the canvas instance
    */
-  target.prototype.onConstruction = function(...args) {
+  target.prototype.onConstruction = function (...args) {
     if (SPECIAL_CONSTRUCTOR[constructorName] !== undefined) {
-      const {className, paramNum} = SPECIAL_CONSTRUCTOR[constructorName];
-      args[paramNum] = {className, classArgs: [args[paramNum]]};
+      const { className, paramNum } = SPECIAL_CONSTRUCTOR[constructorName];
+      args[paramNum] = { className, classArgs: [args[paramNum]] };
     }
     this[WEBVIEW_TARGET] = ID();
     this.postMessage({
-      type: 'construct',
+      type: "construct",
       payload: {
         constructor: constructorName,
         id: this[WEBVIEW_TARGET],
@@ -53,16 +50,16 @@ export const webviewConstructor = constructorName => target => {
       },
     });
   };
-  target.prototype.toJSON = function() {
-    return {__ref__: this[WEBVIEW_TARGET]};
+  target.prototype.toJSON = function () {
+    return { __ref__: this[WEBVIEW_TARGET] };
   };
 };
 
-export const webviewMethods = methods => target => {
+export const webviewMethods = (methods) => (target) => {
   for (const method of methods) {
-    target.prototype[method] = function(...args) {
+    target.prototype[method] = function (...args) {
       return this.postMessage({
-        type: 'exec',
+        type: "exec",
         payload: {
           target: this[WEBVIEW_TARGET],
           method,
@@ -73,7 +70,7 @@ export const webviewMethods = methods => target => {
   }
 };
 
-export const webviewProperties = properties => target => {
+export const webviewProperties = (properties) => (target) => {
   for (const key of Object.keys(properties)) {
     const initialValue = properties[key];
     const privateKey = `__${key}__`;
@@ -84,7 +81,7 @@ export const webviewProperties = properties => target => {
       },
       set(value) {
         this.postMessage({
-          type: 'set',
+          type: "set",
           payload: {
             target: this[WEBVIEW_TARGET],
             key,
@@ -102,25 +99,25 @@ export const webviewProperties = properties => target => {
   }
 };
 
-export const webviewEvents = types => target => {
-  const {onConstruction} = target.prototype;
-  target.prototype.onConstruction = function() {
+export const webviewEvents = (types) => (target) => {
+  const { onConstruction } = target.prototype;
+  target.prototype.onConstruction = function () {
     if (onConstruction) {
       onConstruction.call(this);
     }
     this.postMessage({
-      type: 'listen',
+      type: "listen",
       payload: {
         types,
         target: this[WEBVIEW_TARGET],
       },
     });
   };
-  target.prototype.addEventListener = function(type, callback) {
-    this.addMessageListener(message => {
+  target.prototype.addEventListener = function (type, callback) {
+    this.addMessageListener((message) => {
       if (
         message &&
-        message.type === 'event' &&
+        message.type === "event" &&
         message.payload.target[WEBVIEW_TARGET] === this[WEBVIEW_TARGET] &&
         message.payload.type === type
       ) {

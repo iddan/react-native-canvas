@@ -14,24 +14,23 @@ export default class Bus {
    */
   _queue = [];
   /**
-   * @param {function} send 
+   * @param {function} send
    */
   constructor(send) {
     this._send = send;
   }
   /**
-   * @param {Message} message 
+   * @param {Message} message
    * @return {Promise.<Message>}
    */
   post(message) {
-    return new Promise(resolve => {
-
+    return new Promise((resolve) => {
       /**
        * Currently, 'set' is the only message type that's not resolved
        * back to the caller. If we store it here, it will leak memory
        * because the entry won't get removed from this._messageListeners.
        */
-      if (message.type !== 'set') {
+      if (message.type !== "set") {
         this._messageListeners[message.id] = resolve;
       }
 
@@ -43,7 +42,7 @@ export default class Bus {
     });
   }
   /**
-   * @param {Message} message 
+   * @param {Message} message
    * @return {void}
    */
   handle(message) {
@@ -52,12 +51,10 @@ export default class Bus {
     // Delete the message listener from the cache as soon as it's handled.
     delete this._messageListeners[message.id];
 
-
     if (handler) {
       handler(message);
-    }
-    else {
-      console.warn('Received unexpected message', message);
+    } else {
+      console.warn("Received unexpected message", message);
     }
   }
   /**

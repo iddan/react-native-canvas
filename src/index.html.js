@@ -326,18 +326,20 @@ export default `<html><head>
     }
 })();
 </script>
-    <script>var scale = function (ratio) { return function (item) {
-    if (typeof item === 'number') {
-        return item * ratio;
-    }
-    return item;
-}; };
+    <script>var scale = function (ratio) {
+    return function (item) {
+        if (typeof item === "number") {
+            return item * ratio;
+        }
+        return item;
+    };
+};
 function autoScaleCanvas(canvas) {
-    var ctx = canvas.getContext('2d');
+    var ctx = canvas.getContext("2d");
     var ratio = window.devicePixelRatio || 1;
     if (ratio !== 1) {
-        canvas.style.width = canvas.width + 'px';
-        canvas.style.height = canvas.height + 'px';
+        canvas.style.width = canvas.width + "px";
+        canvas.style.height = canvas.height + "px";
         canvas.width *= ratio;
         canvas.height *= ratio;
         ctx.scale(ratio, ratio);
@@ -351,7 +353,6 @@ function autoScaleCanvas(canvas) {
     }
     return canvas;
 }
-;
 window.autoScaleCanvas = autoScaleCanvas;
 </script>
     <script>var __assign = (this && this.__assign) || function () {
@@ -374,24 +375,20 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     }
     return to.concat(ar || Array.prototype.slice.call(from));
 };
-var WEBVIEW_TARGET = '@@WEBVIEW_TARGET';
-var ID = function () {
-    return Math.random()
-        .toString(32)
-        .slice(2);
-};
+var WEBVIEW_TARGET = "@@WEBVIEW_TARGET";
+var ID = function () { return Math.random().toString(32).slice(2); };
 var flattenObjectCopyValue = function (flatObj, srcObj, key) {
     var value = srcObj[key];
-    if (typeof value === 'function') {
+    if (typeof value === "function") {
         return;
     }
-    if (typeof value === 'object' && value instanceof Node) {
+    if (typeof value === "object" && value instanceof Node) {
         return;
     }
     flatObj[key] = flattenObject(value);
 };
 var flattenObject = function (object) {
-    if (typeof object !== 'object' || object === null) {
+    if (typeof object !== "object" || object === null) {
         return object;
     }
     var flatObject = {};
@@ -453,7 +450,7 @@ var AutoScaledCanvas = (function () {
 var toMessage = function (result) {
     if (result instanceof Blob) {
         return {
-            type: 'blob',
+            type: "blob",
             payload: btoa(result),
             meta: {},
         };
@@ -465,7 +462,7 @@ var toMessage = function (result) {
             targets[id] = result;
         }
         return {
-            type: 'json',
+            type: "json",
             payload: flattenObject(result),
             args: toArgs(flattenObject(result)),
             meta: {
@@ -475,7 +472,7 @@ var toMessage = function (result) {
         };
     }
     return {
-        type: 'json',
+        type: "json",
         payload: JSON.stringify(result),
         meta: {},
     };
@@ -483,7 +480,7 @@ var toMessage = function (result) {
 var toArgs = function (result) {
     var args = [];
     for (var key in result) {
-        if (result[key] !== undefined && key !== '@@WEBVIEW_TARGET') {
+        if (result[key] !== undefined && key !== "@@WEBVIEW_TARGET") {
             if (typedArrays[result[key].constructor.name] !== undefined) {
                 result[key] = Array.from(result[key]);
             }
@@ -504,11 +501,11 @@ var createObjectsFromArgs = function (args) {
     }
     return args;
 };
-var canvas = document.createElement('canvas');
+var canvas = document.createElement("canvas");
 var autoScaledCanvas = new AutoScaledCanvas(canvas);
 var targets = {
     canvas: autoScaledCanvas,
-    context2D: canvas.getContext('2d'),
+    context2D: canvas.getContext("2d"),
 };
 var constructors = {
     Image: Image,
@@ -551,11 +548,11 @@ function handleMessage(_a) {
     var _b, _c;
     var id = _a.id, type = _a.type, payload = _a.payload;
     switch (type) {
-        case 'exec': {
+        case "exec": {
             var target = payload.target, method = payload.method, args = payload.args;
             var result = (_b = targets[target])[method].apply(_b, args.map(populateRefs));
             var message = toMessage(result);
-            if (typeof result === 'object' && !message.meta.constructor) {
+            if (typeof result === "object" && !message.meta.constructor) {
                 for (var constructorName in constructors) {
                     if (result instanceof constructors[constructorName]) {
                         message.meta.constructor = constructorName;
@@ -565,12 +562,12 @@ function handleMessage(_a) {
             window.ReactNativeWebView.postMessage(JSON.stringify(__assign({ id: id }, message)));
             break;
         }
-        case 'set': {
+        case "set": {
             var target = payload.target, key = payload.key, value = payload.value;
             targets[target][key] = populateRefs(value);
             break;
         }
-        case 'construct': {
+        case "construct": {
             var constructor = payload.constructor, target = payload.id, _d = payload.args, args = _d === void 0 ? [] : _d;
             var newArgs = createObjectsFromArgs(args);
             var object = void 0;
@@ -586,14 +583,14 @@ function handleMessage(_a) {
             window.ReactNativeWebView.postMessage(JSON.stringify(__assign({ id: id }, message)));
             break;
         }
-        case 'listen': {
+        case "listen": {
             var types = payload.types, target_1 = payload.target;
             for (var _i = 0, types_1 = types; _i < types_1.length; _i++) {
                 var eventType = types_1[_i];
                 targets[target_1].addEventListener(eventType, function (e) {
                     var _a;
                     var message = toMessage({
-                        type: 'event',
+                        type: "event",
                         payload: {
                             type: e.type,
                             target: __assign(__assign({}, flattenObject(targets[target_1])), (_a = {}, _a[WEBVIEW_TARGET] = target_1, _a)),
@@ -609,13 +606,13 @@ function handleMessage(_a) {
 var handleError = function (err, message) {
     window.ReactNativeWebView.postMessage(JSON.stringify({
         id: message.id,
-        type: 'error',
+        type: "error",
         payload: {
             message: err.message,
             stack: err.stack,
         },
     }));
-    document.removeEventListener('message', handleIncomingMessage);
+    document.removeEventListener("message", handleIncomingMessage);
 };
 function handleIncomingMessage(e) {
     var data = JSON.parse(e.data);
@@ -639,8 +636,8 @@ function handleIncomingMessage(e) {
         }
     }
 }
-window.addEventListener('message', handleIncomingMessage);
-document.addEventListener('message', handleIncomingMessage);
+window.addEventListener("message", handleIncomingMessage);
+document.addEventListener("message", handleIncomingMessage);
 </script>
   
 

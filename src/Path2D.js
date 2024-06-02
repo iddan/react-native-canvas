@@ -1,21 +1,21 @@
-import {webviewConstructor, webviewMethods} from './webview-binders';
+import { webviewConstructor, webviewMethods } from "./webview-binders";
 
 /**
  * Currently doesn't support passing an SVGMatrix in addPath as SVGMatrix is deprecated
  */
 @webviewMethods([
-  'addPath',
-  'closePath',
-  'moveTo',
-  'lineTo',
-  'bezierCurveTo',
-  'quadraticCurveTo',
-  'arc',
-  'arcTo',
-  'ellipse',
-  'rect',
+  "addPath",
+  "closePath",
+  "moveTo",
+  "lineTo",
+  "bezierCurveTo",
+  "quadraticCurveTo",
+  "arc",
+  "arcTo",
+  "ellipse",
+  "rect",
 ])
-@webviewConstructor('Path2D')
+@webviewConstructor("Path2D")
 export default class Path2D {
   constructor(canvas, pathOrD, noOnConstruction) {
     this.canvas = canvas;
@@ -24,11 +24,11 @@ export default class Path2D {
     }
   }
 
-  postMessage = message => {
+  postMessage = (message) => {
     return this.canvas.postMessage(message);
   };
 
-  addMessageListener = listener => {
+  addMessageListener = (listener) => {
     return this.canvas.addMessageListener(listener);
   };
 }
