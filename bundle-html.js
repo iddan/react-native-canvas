@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const parse5 = require('parse5');
 const flow = require('lodash/fp/flow');
-const babel = require('@babel/core');
+const typescript = require('typescript');
 
 const Node = {
   map: transform => node => {
@@ -27,9 +27,15 @@ const newContent = flow([
       const src = node.attrs.find(attr => attr.name === 'src');
       if (src.value) {
         const scriptPath = path.resolve(path.dirname(entryPath), src.value);
-        const scriptContent = babel.transform(fs.readFileSync(scriptPath, 'utf-8'), {
-          comments: false,
-        }).code;
+        const scriptRawContent = fs.readFileSync(scriptPath, 'utf-8');
+        const transpileOutput = typescript.transpileModule(scriptRawContent, {
+          compilerOptions: {
+            allowJs: true,
+            checkJs: false,
+            removeComments: true,
+          },
+        });
+        const scriptContent = transpileOutput.outputText;
         const [newScript] = parse5.parseFragment(`<script>${scriptContent}</script>`, node.parent).childNodes;
         return newScript;
       }

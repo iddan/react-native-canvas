@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "strict": false,
+    "target": "ES5",
+    "experimentalDecorators": true,
+    "declaration": false,
+    "allowJs": true,
+    "checkJs": false,
+    "outDir": "./dist",
+    "jsx": "react-jsx"
+  },
+  "include": ["src"]
+}

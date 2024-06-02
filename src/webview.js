@@ -152,13 +152,13 @@ const createObjectsFromArgs = args => {
   return args;
 };
 
-const print = (...args) => {
-  const message = JSON.stringify({
-    type: 'log',
-    payload: args,
-  });
-  window.ReactNativeWebView.postMessage(message);
-};
+// const print = (...args) => {
+//   const message = JSON.stringify({
+//     type: 'log',
+//     payload: args,
+//   });
+//   window.ReactNativeWebView.postMessage(message);
+// };
 
 const canvas = document.createElement('canvas');
 const autoScaledCanvas = new AutoScaledCanvas(canvas);
