@@ -1,7 +1,4 @@
-<div align="center">
-<img src="https://emojipedia-us.s3.amazonaws.com/thumbs/240/apple/96/fireworks_1f386.png"/>
-<h1>react-native-canvas</h1>
-</div>
+# 🎆 react-native-canvas
 
 A Canvas component for React Native
 
