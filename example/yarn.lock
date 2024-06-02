@@ -6737,6 +6737,11 @@ react-is@^17.0.1:
   dependencies:
     ctx-polyfill "^1.1.4"
 
+"react-native-canvas@file:../.":
+  version "0.1.39"
+  dependencies:
+    ctx-polyfill "^1.1.4"
+
 react-native-helmet-async@2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/react-native-helmet-async/-/react-native-helmet-async-2.0.4.tgz#93f53a1ff22d6898039688a541653a2d6b6866bb"
